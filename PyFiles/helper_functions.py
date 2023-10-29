@@ -1,9 +1,9 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
 def convert_to_forward_slashes(path):
     # Convert Windows backslash paths to forward slash paths
     return path.replace('\\', '/')
-
-import numpy as np
-import matplotlib.pyplot as plt
 
 def plot_ecg(exam_index, tracings_group):
     """
