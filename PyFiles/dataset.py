@@ -1,6 +1,7 @@
 import scipy.io as sio
 import os
 import matplotlib.pyplot as plt
+import torch
 
 class PhysioNetDataset(torch.utils.data.Dataset):
     def __init__(self, dataset_path, train=False):
