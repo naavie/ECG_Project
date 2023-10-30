@@ -1,4 +1,6 @@
 from helper_functions import *
+from tripletloss import TripletLoss
+import torch
 
 if __name__ == '__main__':
     def test_convert_to_forward_slashes():
@@ -25,3 +27,25 @@ if __name__ == '__main__':
         print("All test cases passed!")
     
     test_convert_to_forward_slashes()
+
+    def test_triplet_loss():
+        # Create some random input tensors
+        anchor = torch.randn(4, 20)
+        positive = torch.randn(4, 20)
+        negative = torch.randn(4, 20)
+
+        # Create an instance of the TripletLoss class
+        triplet_loss = TripletLoss(margin=1.0)
+
+        # Compute the loss using the forward method of the TripletLoss class
+        loss = triplet_loss(anchor, positive, negative)
+        print(loss)
+
+        # Compute the expected loss using the formula for the Triplet Loss
+        expected_loss = torch.mean(torch.clamp(F.pairwise_distance(anchor, positive, keepdim=True) - F.pairwise_distance(anchor, negative, keepdim=True) + 1.0, min=0.0))
+        print(expected_loss)
+
+        # Check that the computed loss is equal to the expected loss
+        assert torch.allclose(loss, expected_loss)
+        print(torch.allclose(loss, expected_loss))
+
