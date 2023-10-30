@@ -28,11 +28,15 @@ In order of importance:
 
 2. Write train(), fit(), eval() functions or loops for training the 1DCNN model. 
 
-3. Learn and implement ClinicalBERT code.
+3. Confirm sampling frequency in Hz for normalizing data. 
+    - Frequency range for ECGs in PhysioNet Databases is between: [257, 1000] Hz
+    - All samples in CODE-15 are 500 Hz
 
-4. Send all models/related code to Kostia for review
+4. Learn and implement ClinicalBERT code.
 
-5. Write the following thesis sections (with citations):
+5. Send all models/related code to Kostia for review
+
+6. Write the following thesis sections (with citations):
 
 - Introduction
 - Methodology
