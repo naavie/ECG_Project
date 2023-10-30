@@ -77,6 +77,7 @@ class PhysioNetDataset(torch.utils.data.Dataset):
         return header, twelve_lead_ecg
 
     def plot_record(self, index):
+        mat_file_path = self._mat_files[index]
         data = sio.loadmat(mat_file_path)
         fig, axs = plt.subplots(nrows=3, ncols=4, figsize=(12, 8))
 
