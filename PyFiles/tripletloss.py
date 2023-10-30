@@ -5,7 +5,7 @@ import torch
 class TripletLoss(torch.nn.Module):
     """
     Triplet loss function.
-    Based on: 
+    Based on: https://www.baeldung.com/cs/contrastive-learning
         - L = max(0, ||x - x+||^2 - ||x - x-||^2 + m) (text)
         - L = max(0, \left \| x - x^+ \right \|^2 - \left \| x - x^- \right \|^2 + m) (LaTex)
 
