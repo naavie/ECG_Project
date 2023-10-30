@@ -26,19 +26,33 @@ In order of importance:
 
     - Dx needs to be collected and mapped to SNOWMED-CT Codes in order to create true labels for train/val/test datasets, respectively. 
 
-2. Write train(), fit(), eval() functions or loops for training the 1DCNN model. 
+2. Learn and implement ClinicalBERT code.
 
-3. Confirm sampling frequency in Hz for normalizing data. 
+3.
+ECGEncoder() -- Input is ECG signal, output is CLinicalBERT embedding of ECG
+CLIPModel()  -- Contains ECGEncoder(), ClinicalBERT model and TripletLoss
+
+3. Write train(), fit(), eval() functions or loops for training the 1DCNN model. 
+
+4. Confirm sampling frequency in Hz for normalizing data. 
     - Frequency range for ECGs in PhysioNet Databases is between: [257, 1000] Hz
     - All samples in CODE-15 are 500 Hz
 
-4. Learn and implement ClinicalBERT code.
+    - 80 or 128 Hz is a good starting point but read literature to gain better understanding.
 
 5. Send all models/related code to Kostia for review
 
-6. Write the following thesis sections (with citations):
+6. Model updates:
+
+- Increase # of layers to 10-12.
+- Instead of flattening, consider adaptive average pooling or average max pooling.
+- Attention mechanism ; possibly add between fc layers with Softmax
+
+7. Write the following thesis sections (with citations):
 
 - Introduction
 - Methodology
 - Related Works
 - Dataset Overview
+
+

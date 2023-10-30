@@ -32,7 +32,7 @@ class OneDimCNN(nn.Module):
         self.pool4 = nn.MaxPool1d(kernel_size=2, stride=2)
 
         # Fully Connected Layer 1
-        self.fc1 = nn.Linear(64*3, num_classes)
+        self.fc1 = nn.Linear(256*(1280/16), num_classes)  # If resampled to 128 Hz
         self.relu5 = nn.ReLU()
         self.dropout1 = nn.Dropout(0.5)
 
