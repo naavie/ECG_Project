@@ -3,6 +3,8 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import torch
+import numpy as np
+import h5py
 
 class PhysioNetDataset(torch.utils.data.Dataset):
     def __init__(self, dataset_path, train=False):
@@ -89,3 +91,81 @@ class PhysioNetDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         return len(self.file_PATHS)
+
+
+class CODE15Dataset(torch.utils.data.Dataset):
+    def __init__(self, dataset_path, train=False):
+        self.dataset_path = sorted(list(dataset_path))
+        self.train = train
+        self.file_list = os.listdir(dataset_path)
+        self._exam_ids = []
+        self._tracings_group = []
+        self._hdf5_file_PATHS = []
+        
+        """
+        exams.csv column names: 
+            - exam_id: id used for identifying the exam
+            - age: patient age in years at the moment of the exam
+            - is_male: True if the patient is male
+            - nn_predicted_age: age predicted by a neural network to the patient
+            - 6 modalities: 
+                1. First degree atrioventricular block: 1dAVb
+                2. Right bundle branch block: RBBB
+                3. Left bundle branch: LBBB
+                4. Sinus bradycardia: SB
+                5. Atrial fibrillation: AF
+                6. Sinus tachycardia: ST
+            - patient_id: id used for identifying the patient
+            - normal_ecg: True if the patient has a normal ECG
+            - death: True if the patient dies in the follow-up time. This data is available only in the first exam of the patient.
+            - timey: If the patient dies it is the time to the death of the patient
+            - trace_file: identify in which hdf5 file the file corresponding to this patient is located
+            - exams_part{i}.hdf5: The HDF5 file contains two datasets named `tracings` and other named `exam_id`
+                - The `exam_id` is a tensor of dimension `(N,)` containing the exam id (the same as in the csv file) 
+                - `tracings` is a `(N, 4096, 12)` tensor containing the ECG tracings in the same order. 
+                    - The first dimension corresponds to the different exams; 
+                    - The second dimension corresponds to the 4096 signal samples
+                    - The third dimension to the 12 different leads of the ECG exams in the following order: `{DI, DII, DIII, AVR, AVL, AVF, V1, V2, V3, V4, V5, V6}`. 
+                    - The signals are sampled at 400 Hz. Some signals originally have a duration of 10 seconds (10 * 400 = 4000 samples) and others of 7 seconds (7 * 400 = 2800 samples). 
+                    - In order to make them all have the same size (4096 samples), we fill them with zeros on both sizes. For instance, for a 7 seconds ECG signal with 2800 samples we include 648 samples at the beginning and 648 samples at the end, yielding 4096 samples that are then saved in the hdf5 dataset
+        """
+        exams = os.path.join(dataset_path, 'exams.csv')
+        exams = exams.replace('\\', '/')
+        self.exams = pd.read_csv(exams)
+
+        # Test data
+        if self.train == False:
+            test_set = ['exams_part13.hdf5', 'exams_part14.hdf5', 'exams_part15.hdf5', 'exams_part16.hdf5', 'exams_part17.hdf5', 'exams.csv']
+            for file in os.listdir(dataset_path):
+                if file in test_set:
+                    file_path = os.path.join(dataset_path, file)
+                    file_path = file_path.replace('\\', '/')
+                    self._hdf5_file_PATHS.append(file_path)        
+
+        # Train data
+        else:
+            test_set = ['exams_part13.hdf5', 'exams_part14.hdf5', 'exams_part15.hdf5', 'exams_part16.hdf5', 'exams_part17.hdf5', 'exams.csv']
+            for file in os.listdir(dataset_path):
+                if file not in test_set:
+                    file_path = os.path.join(dataset_path, file)
+                    file_path = file_path.replace('\\', '/')
+                    self._hdf5_file_PATHS.append(file_path)
+        
+        for file_path in self._hdf5_file_PATHS:
+            with h5py.File(file_path, 'r') as f:
+                for i in range(len(f['exam_id'])):
+                    exam_id = np.array(f['exam_id'][i])
+                    tracing = f['tracings'][i]
+                    self._exam_ids.append(exam_id)
+                    self._tracings_group.append(tracing)
+    
+    def __getitem__(self, index):
+        # TODO
+        # Get the exam_id and tracing for the given index
+        exam_id = self._exam_ids[index]
+        tracing = self._tracings_group[index]
+        return exam_id, tracing
+
+    def __len__(self):
+        return len(self._hdf5_file_PATHS)
+    
