@@ -1,6 +1,7 @@
 import scipy.io as sio
 import os
 import matplotlib.pyplot as plt
+import pandas as pd
 import torch
 
 class PhysioNetDataset(torch.utils.data.Dataset):
@@ -75,7 +76,6 @@ class PhysioNetDataset(torch.utils.data.Dataset):
 
     def plot_record(self, index):
         data = sio.loadmat(mat_file_path)
-
         fig, axs = plt.subplots(nrows=3, ncols=4, figsize=(12, 8))
 
         for i, ax in enumerate(axs.flat):
