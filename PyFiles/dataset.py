@@ -68,13 +68,65 @@ class PhysioNetDataset(torch.utils.data.Dataset):
         # 1. Get .hea file
         hea_file_path = self._hea_files[index]
         with open(hea_file_path, 'r') as f:
-            header = print(f.read())
+            lines = f.readlines()
+            
+        # Parse header information
+        # Initialize header information
+        header_info = {
+            'recording_number': lines[0].split()[0],
+            'recording_file': lines[0].split()[0] + '.mat',
+            'num_leads': int(lines[0].split()[1]),
+            'sampling_frequency': int(lines[0].split()[2]),
+            'num_samples': int(lines[0].split()[3]),
+            'leads_info': [],
+            'age': None,
+            'sex': None,
+            'dx': None,
+            'rx': None,
+            'hx': None,
+            'sx': None,
+        }
+
+        # Parse header information
+        for line in lines:
+            if line.startswith('# Age:'):
+                age_str = line.split(':')[1].strip()
+                header_info['age'] = int(age_str) if age_str != 'NaN' else None
+            elif line.startswith('# Sex:'):
+                header_info['sex'] = line.split(':')[1].strip()
+            elif line.startswith('# Dx:'):
+                header_info['dx'] = line.split(':')[1].strip().split(',')
+            elif line.startswith('# Rx:'):
+                header_info['rx'] = line.split(':')[1].strip()
+            elif line.startswith('# Hx:'):
+                header_info['hx'] = line.split(':')[1].strip()
+            elif line.startswith('# Sx:'):
+                header_info['sx'] = line.split(':')[1].strip()
+
+        for line in lines[1:header_info['num_leads']+1]:
+            adc_gain = line.split()[2].split('/')[0]
+            adc_gain = float(adc_gain.replace('(0)', ''))  # Remove '(0)' and convert to float
+            lead_info = {
+                'file': line.split()[0],
+                'adc_gain': adc_gain,
+                'units': line.split()[2].split('/')[1],
+                'adc_resolution': int(line.split()[3]),
+                'adc_zero': int(line.split()[4]),
+                'initial_value': int(line.split()[5]),
+                'checksum': int(line.split()[6]),
+                'lead_name': line.split()[7],
+            }
+            header_info['leads_info'].append(lead_info)
 
         # 2. Get .mat file
-        mat_file_path = self._mat_files[index]
-        twelve_lead_ecg = sio.loadmat(mat_file_path)
+        twelve_lead_ecg = None
+        if index < len(self._mat_files):
+            mat_file_path = self._mat_files[index]
+            twelve_lead_ecg = sio.loadmat(mat_file_path)
+        else:
+            print(f"MAT file for index {index} does not exist.")
         
-        return header, twelve_lead_ecg
+        return header_info, twelve_lead_ecg
 
     def plot_record(self, index):
         mat_file_path = self._mat_files[index]
@@ -91,7 +143,7 @@ class PhysioNetDataset(torch.utils.data.Dataset):
         plt.show()
 
     def __len__(self):
-        return len(self.file_PATHS)
+        return len(self._hea_files)
 
 
 class CODE15Dataset(torch.utils.data.Dataset):
