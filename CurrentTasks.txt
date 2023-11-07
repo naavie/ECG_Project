@@ -2,8 +2,6 @@ As of: 2023-10-30
 
 In order of importance:
 
-2. Learn and implement ClinicalBERT code.
-
 3.
 ECGEncoder() -- Input is ECG signal, output is CLinicalBERT embedding of ECG
 CLIPModel()  -- Contains ECGEncoder(), ClinicalBERT model and TripletLoss
