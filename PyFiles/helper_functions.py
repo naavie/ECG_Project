@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+import ast
 
 def convert_to_forward_slashes(path):
     # Convert Windows backslash paths to forward slash paths
@@ -53,3 +55,14 @@ def plot_ecg(exam_index, tracings_group):
     plt.ylabel('Amplitude (mV)')
     plt.title(f'ECG Tracing (Lead DI) for Exam {exam_index}')
     plt.show()
+
+def load_and_process(filename):
+    """
+    Loads the CSV file and processes it into a DataFrame.
+    """
+    df = pd.read_csv(filename)  # Load data from the CSV file into a DataFrame
+    df['dx'] = df['dx'].apply(ast.literal_eval)  # Convert 'dx' column from string representation of list to actual list
+    return df  # Return the processed DataFrame
+
+def map_codes_to_dx(codes):
+    return [codes_dict.get(int(code), code) for code in codes]
