@@ -7,7 +7,6 @@ import numpy as np
 import h5py
 from scipy.signal import resample
 
-
 class PhysioNetDataset(torch.utils.data.Dataset):
     def __init__(self, dataset_path, train=False):
         self.dataset_path = dataset_path
@@ -65,6 +64,18 @@ class PhysioNetDataset(torch.utils.data.Dataset):
                                     file_path = file_path.replace('\\', '/')
                                     self._mat_files.append(file_path)
                                     self._mat_files_path.append(file_path)
+
+    def resample_ecg(self, data, old_freq, new_freq=128):
+        # Calculate the duration of the signal
+        duration = len(data) / old_freq
+
+        # Calculate the number of points in the resampled signal
+        num_points = int(np.round(duration * new_freq))
+
+        # Resample the signal
+        resampled_data = resample(data, num_points)
+
+        return resampled_data
 
     def __getitem__(self, index):
         # 1. Get .hea file
@@ -125,6 +136,10 @@ class PhysioNetDataset(torch.utils.data.Dataset):
         if index < len(self._mat_files):
             mat_file_path = self._mat_files[index]
             twelve_lead_ecg = sio.loadmat(mat_file_path)
+            
+            # Resample the ECG to 128 Hz
+            for lead in twelve_lead_ecg:
+                twelve_lead_ecg[lead] = self.resample_ecg(twelve_lead_ecg[lead], old_freq=header_info['sampling_frequency'])
         else:
             print(f"MAT file for index {index} does not exist.")
         
@@ -133,10 +148,10 @@ class PhysioNetDataset(torch.utils.data.Dataset):
     def plot_record(self, index):
         mat_file_path = self._mat_files[index]
         data = sio.loadmat(mat_file_path)
-        fig, axs = plt.subplots(nrows=3, ncols=4, figsize=(12, 8))
+        fig, axs = plt.subplots(nrows=3, ncols=4, figsize=(20, 15))
 
         for i, ax in enumerate(axs.flat):
-            ax.plot(data['val'][i])
+            ax.plot(data['val'][i], linewidth=0.5)
             ax.set_xlabel('Sample')
             ax.set_ylabel('Amplitude')
             ax.set_title(f'Lead {i+1}')

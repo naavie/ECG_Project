@@ -8,13 +8,7 @@ In order of importance:
 ECGEncoder() -- Input is ECG signal, output is CLinicalBERT embedding of ECG
 CLIPModel()  -- Contains ECGEncoder(), ClinicalBERT model and TripletLoss
 
-3. Write train(), fit(), eval() functions or loops for training the 1DCNN model. 
-
-4. Confirm sampling frequency in Hz for normalizing data. 
-    - Frequency range for ECGs in PhysioNet Databases is between: [257, 1000] Hz
-    - All samples in CODE-15 are 500 Hz
-
-    - 80 or 128 Hz is a good starting point but read literature to gain better understanding.
+4. Write train(), fit(), eval() functions or loops for training the 1DCNN model. 
 
 5. Send all models/related code to Kostia for review
 
