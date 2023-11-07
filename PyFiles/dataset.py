@@ -5,6 +5,8 @@ import pandas as pd
 import torch
 import numpy as np
 import h5py
+from scipy.signal import resample
+
 
 class PhysioNetDataset(torch.utils.data.Dataset):
     def __init__(self, dataset_path, train=False):
