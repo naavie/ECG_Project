@@ -2,19 +2,36 @@ As of: 2023-10-30
 
 In order of importance:
 
-3.
-ECGEncoder() -- Input is ECG signal, output is CLinicalBERT embedding of ECG
-CLIPModel()  -- Contains ECGEncoder(), ClinicalBERT model and TripletLoss
+1. TextEncoder()
 
-4. Write train(), fit(), eval() functions or loops for training the 1DCNN model. 
+The `TextEncoder` is used to convert the description of the (dx_modality) diagnosis class into embeddings using the ClinicalBERT model.
+
+- Input should be a concatenated using comma or blank space string of diagnoses/dx_modality per ECG signal.
+- Use processed CSV files (dx_modality vs dx_modality, age, etc together)
+- Frozen weights (since it's already pretrained)
+
+2. ECGEncoder() -- Input is ECG signal, output will be embeddings of ECG signal
+
+- This is going to be model in model.py 
+- Model weights are updated iteratively
+- optimizer = torch.optim.Adam(clip_model.ECGEncoder.parameters())
+
+3. Update TripletLoss() such that:
+- positive_instances are where the ECG embedding and dx_modality embedding align (from the same file/reading)
+- negative_instances are where these two embeddings do not align
+- filter out text embeddings that are the same or equal to the positive_instances
+
+4. CLIPModel()
+Contains:
+- TextEncoder()
+- ECGEncoder()
+- TripletLoss()
 
 5. Send all models/related code to Kostia for review
 
 6. Model updates:
 
-- Increase # of layers to 10-12.
-- Instead of flattening, consider adaptive average pooling or average max pooling.
-- Attention mechanism ; possibly add between fc layers with Softmax
+- Don't use MaxPool and Don't use Attention. It doesn't make sense to use both. 
 
 7. Write the following thesis sections (with citations):
 
