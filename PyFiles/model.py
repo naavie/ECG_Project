@@ -32,12 +32,12 @@ class OneDimCNN(nn.Module):
         self.pool4 = nn.AvgPool1d(kernel_size=2, stride=2)
 
         # Fully Connected Layer 1
-        self.fc1 = nn.Linear(79872, num_classes)  # Updated this line
+        self.fc1 = nn.Linear(79872, 128)
         self.relu5 = nn.ReLU()
         self.dropout1 = nn.Dropout(0.5)
 
         # Fully Connected Layer 2
-        self.fc2 = nn.Linear(num_classes, num_classes)
+        self.fc2 = nn.Linear(128, num_classes)
 
     def forward(self, x):
         # Layer 1
@@ -66,6 +66,7 @@ class OneDimCNN(nn.Module):
 
         # Flatten the tensor
         x = x.view(x.size(0), -1)
+        print(x.shape)  # Add this line
 
         # Fully Connected Layer 1
         x = self.fc1(x)
