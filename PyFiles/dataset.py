@@ -80,7 +80,7 @@ class PhysioNetDataset(torch.utils.data.Dataset):
     def __getitem__(self, index):
         if isinstance(index, slice):
             start, stop, step = index.indices(len(self))
-        return [self[i] for i in range(start, stop, step)]
+            return [self[i] for i in range(start, stop, step)]
         # 1. Get .hea file
         hea_file_path = self._hea_files[index]
         with open(hea_file_path, 'r') as f:
