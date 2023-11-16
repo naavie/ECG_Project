@@ -37,7 +37,7 @@ class OneDimCNN(nn.Module):
         self.dropout1 = nn.Dropout(0.5)
 
         # Fully Connected Layer 2
-        self.fc2 = nn.Linear(128, num_classes)
+        self.fc2 = nn.Linear(128, 128)
 
     def forward(self, x):
         # Layer 1
@@ -45,35 +45,41 @@ class OneDimCNN(nn.Module):
         x = self.bn1(x)
         x = self.relu1(x)
         x = self.pool1(x)
+        print("After Layer 1:", x.size())
 
         # Layer 2
         x = self.conv2(x)
         x = self.bn2(x)
         x = self.relu2(x)
         x = self.pool2(x)
+        print("After Layer 2:", x.size())
 
         # Layer 3
         x = self.conv3(x)
         x = self.bn3(x)
         x = self.relu3(x)
         x = self.pool3(x)
+        print("After Layer 3:", x.size())
 
         # Layer 4
         x = self.conv4(x)
         x = self.bn4(x)
         x = self.relu4(x)
         x = self.pool4(x)
+        print("After Layer 4:", x.size())
 
         # Flatten the tensor
         x = x.view(x.size(0), -1)
-        print(x.shape)  # Add this line
+        print("After Flattening:", x.size())
 
         # Fully Connected Layer 1
         x = self.fc1(x)
         x = self.relu5(x)
         x = self.dropout1(x)
+        print("After FC Layer 1:", x.size())
 
         # Fully Connected Layer 2
         x = self.fc2(x)
+        print("After FC Layer 2:", x.size())
 
         return x
