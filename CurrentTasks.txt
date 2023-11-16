@@ -2,6 +2,31 @@ As of: 2023-10-30
 
 In order of importance:
 
+1. Related Work Analysis
+
+- Pay attention to OverLeaf template 
+
+2. Pipeline Completion: 
+
+- Update number of layers of 1DCNN to 10 layers
+
+- Update InstanceSelector such that there are is no positive instance function and generate false_instances based on instances that do not correspond
+
+- Use Dataloaders for next training/presentation to Kostia/Semeon
+
+3. Search for analogue models on HuggingFace (for BERT)
+
+- Benchmark 
+- Think about the outcomes of the paper when doing this research 
+
+4. Sperteral analysis of ECG signal using Python packages. Or use frequencies to get embeddings (use images of ECG)
+
+- Fourier & Wavelet Spectrograms
+
+5. Extract some punchline/hypothesis 
+
+--
+
 1. TextEncoder()  - COMPLETED
 
 The `TextEncoder` is used to convert the description of the (dx_modality) diagnosis class into embeddings using the ClinicalBERT model.
