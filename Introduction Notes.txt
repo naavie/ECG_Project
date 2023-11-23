@@ -1,0 +1,5 @@
+In the field of electrocardiography, an electrocardiogram (ECG/EKG) is one of the most popular and effective biomedical tools available to cardiologists and other clinicals to monitor the heart activity of their patients as well as to diagnose and provide ongoing medical care of heart-realted diseases. 
+
+Once an ECG report becomes available to clinicans, one of the preliminary steps to interpret the ECG data involves having a licensed cardiologist, a medical doctor specializing in heart health and pathologies, to manually analyze and annotate the ECG report based on some criteria [CITATION]. This process in itself is a central limitation of ECG reports as they not only require extensive manual labour but also require someone with a very particular skillset and knowledge to perform [CITATION]. Furthermore, recent literature has suggested that interpretation of ECG reports from one cardiologist to another cardiologists can be vastly different [CITATION]. These differences in interpretation can be attribtuted to the pattern complexities embedded within the ECG report which by nature make them difficult to detect and correctly classify [CITATION].  
+
+
