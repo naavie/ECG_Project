@@ -30,6 +30,17 @@ In order of importance:
 
 Current: 11/23/2023
 
+- Change number of layers of fully connected layer 2 to 768 out_channels
+- Alternatively look into getting rid of the second fully connected layer. 
+- Shifting from 128 --> 768 can cause loss of information. 
+- Update all layers after layer 7 as follows:  
+    - ```self.conv7 = nn.Conv1d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1)```
+    - ```self.bn7 = nn.BatchNorm1d(512)```
+
+- Update the PhysioNetDataset class such that instead of header_info --> return header_info['Dx']. Then convert the Dx code to string input for TextEncoder(). 
+
+- Dropout baseline: remove it for now. After pipeline is ready, we can consider adding it back. 
+
 1. Send all models/related code to Kostia for review with document outlining current bugs + areas where help is needed
 
 2. Complete Thesis: 
