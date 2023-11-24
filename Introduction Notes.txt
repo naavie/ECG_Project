@@ -2,4 +2,11 @@ In the field of electrocardiography, an electrocardiogram (ECG/EKG) is one of th
 
 Once an ECG report becomes available to clinicans, one of the preliminary steps to interpret the ECG data involves having a licensed cardiologist, a medical doctor specializing in heart health and pathologies, to manually analyze and annotate the ECG report based on some criteria [CITATION]. This process in itself is a central limitation of ECG reports as they not only require extensive manual labour but also require someone with a very particular skillset and knowledge to perform [CITATION]. Furthermore, recent literature has suggested that interpretation of ECG reports from one cardiologist to another cardiologists can be vastly different [CITATION]. These differences in interpretation can be attribtuted to the pattern complexities embedded within the ECG report which by nature make them difficult to detect and correctly classify [CITATION].  
 
+Benefits of our zeroshot classification approach:
+
+1. Classification codes for ECG modalities vary from region to region. For instance a diagnosis code used in USA may not be the same diagnosis code that is used in Europe for example. Using our pretrained model, we allow anyone, irrespective of region, to easily classify an ECG signal and get the corresponding label/diagnosis/code.
+
+2. Our zeroshot classification approach is a precursor to GPT-like models where we can generate reports about ECGs given some signals.
+
+
 
