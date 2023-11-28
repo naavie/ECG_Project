@@ -111,7 +111,9 @@ class PhysioNetDataset(torch.utils.data.Dataset):
             elif line.startswith('# Sex:'):
                 header_info['sex'] = line.split(':')[1].strip()
             elif line.startswith('# Dx:'):
-                header_info['dx'] = line.split(':')[1].strip().split(',')
+                dx_codes = line.split(':')[1].strip().split(',')
+                dx_modalities = [codes_dict.get(int(code.strip()), code.strip()) for code in dx_codes]
+                header_info['dx'] = [codes_dict.get(int(code.strip()), code.strip()) for code in dx_codes]
             elif line.startswith('# Rx:'):
                 header_info['rx'] = line.split(':')[1].strip()
             elif line.startswith('# Hx:'):
@@ -146,7 +148,8 @@ class PhysioNetDataset(torch.utils.data.Dataset):
         else:
             print(f"MAT file for index {index} does not exist.")
         
-        return header_info, twelve_lead_ecg
+        # Return list of diagnoses and the np array of the 12-lead ECG
+        return dx_modalities, twelve_lead_ecg['val']
 
     def plot_record(self, index):
         mat_file_path = self._mat_files[index]
