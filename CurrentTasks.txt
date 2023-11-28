@@ -37,8 +37,6 @@ Current: 11/23/2023
     - ```self.conv7 = nn.Conv1d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1)```
     - ```self.bn7 = nn.BatchNorm1d(512)```
 
-- Update the PhysioNetDataset class such that instead of header_info --> return header_info['Dx']. Then convert the Dx code to string input for TextEncoder(). 
-
 - Dropout baseline: remove it for now. After pipeline is ready, we can consider adding it back. 
 
 1. Send all models/related code to Kostia for review with document outlining current bugs + areas where help is needed
