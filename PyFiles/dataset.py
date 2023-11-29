@@ -7,7 +7,7 @@ import numpy as np
 import h5py
 from scipy.signal import resample
 
-class PhysioNetDataset(torch.utils.data.Dataset):
+class PhysioNetDatasetV1(torch.utils.data.Dataset):
     def __init__(self, dataset_path, train=False):
         self.dataset_path = dataset_path
         self.dataset_path = [path for path in self.dataset_path if "index.html" not in path]
@@ -45,7 +45,7 @@ class PhysioNetDataset(torch.utils.data.Dataset):
                 for sub_folder in os.listdir(path):
                     sub_folder_path = os.path.join(path, sub_folder)
                     sub_folder_path = sub_folder_path.replace('\\', '/')
-                    
+
                     # Ignore index.html files
                     if sub_folder_path.endswith('index.html'):
                         self._indices_files.append(sub_folder_path)
@@ -65,17 +65,14 @@ class PhysioNetDataset(torch.utils.data.Dataset):
                                     self._mat_files.append(file_path)
                                     self._mat_files_path.append(file_path)
 
-    def resample_ecg(self, data, old_freq, new_freq=128):
-        # Calculate the duration of the signal
-        duration = len(data) / old_freq
+    def resample_ecg(self, ecg, new_length=1280):
+        # Get the current length of the ECG
+        current_length = ecg.shape[1]
 
-        # Calculate the number of points in the resampled signal
-        num_points = int(np.round(duration * new_freq))
+        # Resample the ECG
+        resampled_ecg = resample(ecg, new_length, axis=1)
 
-        # Resample the signal
-        resampled_data = resample(data, num_points)
-
-        return resampled_data
+        return resampled_ecg
 
     def __getitem__(self, index):
         if isinstance(index, slice):
@@ -85,7 +82,7 @@ class PhysioNetDataset(torch.utils.data.Dataset):
         hea_file_path = self._hea_files[index]
         with open(hea_file_path, 'r') as f:
             lines = f.readlines()
-            
+
         # Parse header information
         # Initialize header information
         header_info = {
@@ -140,16 +137,19 @@ class PhysioNetDataset(torch.utils.data.Dataset):
         twelve_lead_ecg = None
         if index < len(self._mat_files):
             mat_file_path = self._mat_files[index]
-            twelve_lead_ecg = sio.loadmat(mat_file_path)
+            mat_data = sio.loadmat(mat_file_path)
+
+            # Extract the ECG data
+            twelve_lead_ecg = mat_data['val']
+
+            # Resample the ECG if it is not None
+            twelve_lead_ecg = self.resample_ecg(twelve_lead_ecg)
             
-            # Resample the ECG to 128 Hz
-            for lead in twelve_lead_ecg:
-                twelve_lead_ecg[lead] = self.resample_ecg(twelve_lead_ecg[lead], old_freq=header_info['sampling_frequency'])
         else:
             print(f"MAT file for index {index} does not exist.")
-        
+
         # Return list of diagnoses and the np array of the 12-lead ECG
-        return dx_modalities, twelve_lead_ecg['val']
+        return dx_modalities, twelve_lead_ecg
 
     def plot_record(self, index):
         mat_file_path = self._mat_files[index]
@@ -167,7 +167,6 @@ class PhysioNetDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         return len(self._hea_files)
-
 
 class CODE15Dataset(torch.utils.data.Dataset):
     def __init__(self, dataset_path, train=False):
