@@ -38,8 +38,7 @@ class TextEncoderV2:
         return embeddings
 
 
-# Case 3: Same as Case 1, except for Colab GPU 
-
+# Case 3: Same as TextEncoderV1, except for Colab GPU 
 class TextEncoder(nn.Module):
     def __init__(self, device):
         super().__init__()
