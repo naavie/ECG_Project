@@ -1,0 +1,157 @@
+Batch 1/110, Batch Loss: 6.2384, Running Loss: 6.2384:   1%|          | 1/110 [05:48<10:32:19, 348.07s/it]torch.Size([512, 512, 1])
+Batch 2/110, Batch Loss: 6.2348, Running Loss: 6.2366:   2%|▏         | 2/110 [11:21<10:11:20, 339.63s/it]torch.Size([512, 512, 1])
+Batch 3/110, Batch Loss: 6.2305, Running Loss: 6.2346:   3%|▎         | 3/110 [16:54<10:00:17, 336.61s/it]torch.Size([512, 512, 1])
+Batch 4/110, Batch Loss: 6.2265, Running Loss: 6.2325:   4%|▎         | 4/110 [22:30<9:53:53, 336.16s/it] torch.Size([512, 512, 1])
+Batch 5/110, Batch Loss: 6.2251, Running Loss: 6.2311:   5%|▍         | 5/110 [28:09<9:50:11, 337.25s/it]torch.Size([512, 512, 1])
+Batch 6/110, Batch Loss: 6.2216, Running Loss: 6.2295:   5%|▌         | 6/110 [33:47<9:44:44, 337.35s/it]torch.Size([512, 512, 1])
+Batch 7/110, Batch Loss: 6.2180, Running Loss: 6.2279:   6%|▋         | 7/110 [39:27<9:41:00, 338.45s/it]torch.Size([512, 512, 1])
+Batch 8/110, Batch Loss: 6.2164, Running Loss: 6.2264:   7%|▋         | 8/110 [45:07<9:36:16, 338.99s/it]torch.Size([512, 512, 1])
+Batch 9/110, Batch Loss: 6.2157, Running Loss: 6.2252:   8%|▊         | 9/110 [50:50<9:32:24, 340.05s/it]torch.Size([512, 512, 1])
+Batch 10/110, Batch Loss: 6.2187, Running Loss: 6.2246:   9%|▉         | 10/110 [56:29<9:26:28, 339.88s/it]torch.Size([512, 512, 1])
+Batch 11/110, Batch Loss: 6.2186, Running Loss: 6.2240:  10%|█         | 11/110 [1:02:06<9:19:13, 338.93s/it]torch.Size([512, 512, 1])
+Batch 12/110, Batch Loss: 6.2187, Running Loss: 6.2236:  11%|█         | 12/110 [1:07:47<9:14:37, 339.56s/it]torch.Size([512, 512, 1])
+Batch 13/110, Batch Loss: 6.2132, Running Loss: 6.2228:  12%|█▏        | 13/110 [1:13:31<9:11:05, 340.88s/it]torch.Size([512, 512, 1])
+Batch 14/110, Batch Loss: 6.2097, Running Loss: 6.2219:  13%|█▎        | 14/110 [1:19:16<9:07:37, 342.27s/it]torch.Size([512, 512, 1])
+Batch 15/110, Batch Loss: 6.2151, Running Loss: 6.2214:  14%|█▎        | 15/110 [1:25:07<9:05:55, 344.80s/it]torch.Size([512, 512, 1])
+Batch 16/110, Batch Loss: 6.2092, Running Loss: 6.2206:  15%|█▍        | 16/110 [1:30:52<9:00:01, 344.70s/it]torch.Size([512, 512, 1])
+Batch 17/110, Batch Loss: 6.2108, Running Loss: 6.2201:  15%|█▌        | 17/110 [1:36:30<8:51:27, 342.87s/it]torch.Size([512, 512, 1])
+Batch 18/110, Batch Loss: 6.2135, Running Loss: 6.2197:  16%|█▋        | 18/110 [1:42:22<8:49:52, 345.57s/it]torch.Size([512, 512, 1])
+Batch 19/110, Batch Loss: 6.2059, Running Loss: 6.2190:  17%|█▋        | 19/110 [1:48:04<8:42:30, 344.51s/it]torch.Size([512, 512, 1])
+Batch 20/110, Batch Loss: 6.2097, Running Loss: 6.2185:  18%|█▊        | 20/110 [1:53:48<8:36:28, 344.32s/it]torch.Size([512, 512, 1])
+Batch 21/110, Batch Loss: 6.2010, Running Loss: 6.2177:  19%|█▉        | 21/110 [1:59:30<8:29:42, 343.62s/it]torch.Size([512, 512, 1])
+Batch 22/110, Batch Loss: 6.2052, Running Loss: 6.2171:  20%|██        | 22/110 [2:05:12<8:23:18, 343.16s/it]torch.Size([512, 512, 1])
+Batch 23/110, Batch Loss: 6.2029, Running Loss: 6.2165:  21%|██        | 23/110 [2:10:56<8:17:53, 343.37s/it]torch.Size([512, 512, 1])
+Batch 24/110, Batch Loss: 6.2077, Running Loss: 6.2161:  22%|██▏       | 24/110 [2:16:43<8:13:42, 344.45s/it]torch.Size([512, 512, 1])
+Batch 25/110, Batch Loss: 6.2076, Running Loss: 6.2158:  23%|██▎       | 25/110 [2:22:24<8:06:28, 343.40s/it]torch.Size([512, 512, 1])
+Batch 26/110, Batch Loss: 6.2038, Running Loss: 6.2153:  24%|██▎       | 26/110 [2:28:05<7:59:53, 342.78s/it]torch.Size([512, 512, 1])
+Batch 27/110, Batch Loss: 6.2073, Running Loss: 6.2150:  25%|██▍       | 27/110 [2:33:45<7:53:00, 341.93s/it]torch.Size([512, 512, 1])
+Batch 28/110, Batch Loss: 6.2011, Running Loss: 6.2145:  25%|██▌       | 28/110 [2:39:27<7:47:09, 341.82s/it]torch.Size([512, 512, 1])
+Batch 29/110, Batch Loss: 6.2029, Running Loss: 6.2141:  26%|██▋       | 29/110 [2:45:02<7:38:47, 339.84s/it]torch.Size([512, 512, 1])
+Batch 30/110, Batch Loss: 6.2006, Running Loss: 6.2137:  27%|██▋       | 30/110 [2:50:42<7:33:14, 339.93s/it]torch.Size([512, 512, 1])
+Batch 31/110, Batch Loss: 6.2020, Running Loss: 6.2133:  28%|██▊       | 31/110 [2:56:16<7:25:10, 338.11s/it]torch.Size([512, 512, 1])
+Batch 32/110, Batch Loss: 6.1985, Running Loss: 6.2128:  29%|██▉       | 32/110 [3:01:51<7:18:12, 337.09s/it]torch.Size([512, 512, 1])
+Batch 33/110, Batch Loss: 6.1945, Running Loss: 6.2123:  30%|███       | 33/110 [3:07:26<7:11:49, 336.48s/it]torch.Size([512, 512, 1])
+Batch 34/110, Batch Loss: 6.1901, Running Loss: 6.2116:  31%|███       | 34/110 [3:13:06<7:07:41, 337.66s/it]torch.Size([512, 512, 1])
+Batch 35/110, Batch Loss: 6.1950, Running Loss: 6.2112:  32%|███▏      | 35/110 [3:18:42<7:01:24, 337.12s/it]torch.Size([512, 512, 1])
+Batch 36/110, Batch Loss: 6.2028, Running Loss: 6.2109:  33%|███▎      | 36/110 [3:24:20<6:56:09, 337.42s/it]torch.Size([512, 512, 1])
+Batch 37/110, Batch Loss: 6.1983, Running Loss: 6.2106:  34%|███▎      | 37/110 [3:30:03<6:52:34, 339.11s/it]torch.Size([512, 512, 1])
+Batch 38/110, Batch Loss: 6.2030, Running Loss: 6.2104:  35%|███▍      | 38/110 [3:35:47<6:48:31, 340.44s/it]torch.Size([512, 512, 1])
+Batch 39/110, Batch Loss: 6.1946, Running Loss: 6.2100:  35%|███▌      | 39/110 [3:41:33<6:45:00, 342.27s/it]torch.Size([512, 512, 1])
+
+---------------------------------------------------------------------------
+OSError                                   Traceback (most recent call last)
+/usr/local/lib/python3.10/dist-packages/scipy/io/matlab/_mio.py in _open_file_context(file_like, appendmat, mode)
+     18     try:
+---> 19         yield f
+     20     finally:
+
+14 frames
+/usr/local/lib/python3.10/dist-packages/scipy/io/matlab/_mio.py in loadmat(file_name, mdict, appendmat, **kwargs)
+    225     with _open_file_context(file_name, appendmat) as f:
+--> 226         MR, _ = mat_reader_factory(f, **kwargs)
+    227         matfile_dict = MR.get_variables(variable_names)
+
+/usr/local/lib/python3.10/dist-packages/scipy/io/matlab/_mio.py in mat_reader_factory(file_name, appendmat, **kwargs)
+     73     byte_stream, file_opened = _open_file(file_name, appendmat)
+---> 74     mjv, mnv = _get_matfile_version(byte_stream)
+     75     if mjv == 0:
+
+/usr/local/lib/python3.10/dist-packages/scipy/io/matlab/_miobase.py in _get_matfile_version(fileobj)
+    229     fileobj.seek(0)
+--> 230     mopt_bytes = fileobj.read(4)
+    231     if len(mopt_bytes) == 0:
+
+OSError: [Errno 107] Transport endpoint is not connected
+
+During handling of the above exception, another exception occurred:
+
+OSError                                   Traceback (most recent call last)
+<ipython-input-33-a927d77566bb> in <cell line: 1>()
+----> 1 model, train_losses = train_model(model=CLIP_model,
+      2                                   optimizer=optimizer,
+      3                                   num_epochs=num_epochs,
+      4                                   device=device,
+      5                                   train_loader=current_train_loader)
+
+<ipython-input-32-2373e45ecf02> in train_model(model, optimizer, num_epochs, device, train_loader)
+      9         pbar = tqdm(enumerate(train_loader, 0), total=len(train_loader), leave=False)
+     10 
+---> 11         for i, data in pbar:
+     12             labels = data[0]
+     13             ecgs = data[1].float().to(device)
+
+/usr/local/lib/python3.10/dist-packages/tqdm/std.py in __iter__(self)
+   1180 
+   1181         try:
+-> 1182             for obj in iterable:
+   1183                 yield obj
+   1184                 # Update and possibly print the progressbar.
+
+/usr/local/lib/python3.10/dist-packages/torch/utils/data/dataloader.py in __next__(self)
+    628                 # TODO(https://github.com/pytorch/pytorch/issues/76750)
+    629                 self._reset()  # type: ignore[call-arg]
+--> 630             data = self._next_data()
+    631             self._num_yielded += 1
+    632             if self._dataset_kind == _DatasetKind.Iterable and \
+
+/usr/local/lib/python3.10/dist-packages/torch/utils/data/dataloader.py in _next_data(self)
+    672     def _next_data(self):
+    673         index = self._next_index()  # may raise StopIteration
+--> 674         data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+    675         if self._pin_memory:
+    676             data = _utils.pin_memory.pin_memory(data, self._pin_memory_device)
+
+/usr/local/lib/python3.10/dist-packages/torch/utils/data/_utils/fetch.py in fetch(self, possibly_batched_index)
+     47         if self.auto_collation:
+     48             if hasattr(self.dataset, "__getitems__") and self.dataset.__getitems__:
+---> 49                 data = self.dataset.__getitems__(possibly_batched_index)
+     50             else:
+     51                 data = [self.dataset[idx] for idx in possibly_batched_index]
+
+/usr/local/lib/python3.10/dist-packages/torch/utils/data/dataset.py in __getitems__(self, indices)
+    362             return self.dataset.__getitems__([self.indices[idx] for idx in indices])  # type: ignore[attr-defined]
+    363         else:
+--> 364             return [self.dataset[self.indices[idx]] for idx in indices]
+    365 
+    366     def __len__(self):
+
+/usr/local/lib/python3.10/dist-packages/torch/utils/data/dataset.py in <listcomp>(.0)
+    362             return self.dataset.__getitems__([self.indices[idx] for idx in indices])  # type: ignore[attr-defined]
+    363         else:
+--> 364             return [self.dataset[self.indices[idx]] for idx in indices]
+    365 
+    366     def __len__(self):
+
+<ipython-input-12-932f54adefa9> in __getitem__(self, index)
+     86         if index < len(self._mat_files):
+     87             mat_file_path = self._mat_files[index]
+---> 88             mat_data = sio.loadmat(mat_file_path)
+     89 
+     90             # Extract the ECG data
+
+/usr/local/lib/python3.10/dist-packages/scipy/io/matlab/_mio.py in loadmat(file_name, mdict, appendmat, **kwargs)
+    223     """
+    224     variable_names = kwargs.pop('variable_names', None)
+--> 225     with _open_file_context(file_name, appendmat) as f:
+    226         MR, _ = mat_reader_factory(f, **kwargs)
+    227         matfile_dict = MR.get_variables(variable_names)
+
+/usr/lib/python3.10/contextlib.py in __exit__(self, typ, value, traceback)
+    151                 value = typ()
+    152             try:
+--> 153                 self.gen.throw(typ, value, traceback)
+    154             except StopIteration as exc:
+    155                 # Suppress StopIteration *unless* it's the same exception that
+
+/usr/local/lib/python3.10/dist-packages/scipy/io/matlab/_mio.py in _open_file_context(file_like, appendmat, mode)
+     20     finally:
+     21         if opened:
+---> 22             f.close()
+     23 
+     24 
+
+OSError: [Errno 107] Transport endpoint is not connected
+
+After 4 hours of runtime. This is a known Google Colab error. Looking for workarounds.
+-----------------------------------------------------------------------------------------------------------------------------------------
+
