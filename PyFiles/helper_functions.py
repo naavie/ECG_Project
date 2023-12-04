@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import ast
+import torch
+from torch.nn.utils.rnn import pad_sequence
 
 def convert_to_forward_slashes(path):
     # Convert Windows backslash paths to forward slash paths
@@ -66,3 +68,35 @@ def load_and_process(filename):
 
 def map_codes_to_dx(codes):
     return [codes_dict.get(int(code), code) for code in codes]
+
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+def collate_fn(batch):
+    """
+    Processes a batch of data by separating the texts and ECGs, and padding the ECG sequences.
+
+    Parameters
+    ----------
+    batch : list of tuples
+        The batch data. Each item in the batch is a tuple where the first element is the text and the second element is the ECG.
+
+    Returns
+    -------
+    tuple
+        A tuple containing two elements. The first element is a list of texts. The second element is a tensor of padded ECG sequences.
+
+    Notes
+    -----
+    This function is typically used as the `collate_fn` argument to a `torch.utils.data.DataLoader`. The `collate_fn` is applied to a list of data samples to form a batch. This function separates the texts and ECGs from the batch data, pads the ECG sequences so they all have the same length, and returns the texts and padded ECGs.
+
+    Examples
+    --------
+    >>> data = [("text1", np.array([1, 2, 3])), ("text2", np.array([4, 5, 6, 7]))]
+    >>> texts, ecgs_padded = collate_fn(data)
+    """
+    texts = [item[0] for item in batch]
+    ecgs = [item[1] for item in batch]
+    # Pad the sequences
+    ecgs_padded = pad_sequence([torch.from_numpy(ecg) for ecg in ecgs], batch_first=True)
+    return texts, ecgs_padded
