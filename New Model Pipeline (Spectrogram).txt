@@ -1,0 +1,26 @@
+Due to model convergence issues with the original pipeline the new idea is as follows:
+
+1. Convert ECG signals into images of spectrograms (12 channels; 1 image for each lead) 
+
+- The first three leads are most important so use only the first three leads. That means, there should be 3 images (1 for each lead) per each diagnosis/record.
+
+
+- Find clip with different text encoders on HuggingFace
+- Projection layers can be used for ClincalBERT on HuggingFace. 
+- Wavelet/Images of ECGs can be used as baseline
+
+Links: 
+
+- https://www.researchgate.net/figure/SPECTROGRAMS-FOR-ECG-SIGNALS_fig1_332070176
+
+- https://huggingface.co/docs/transformers/model_doc/clip
+
+- https://github.com/OpenAI/CLIP
+
+2. Prompts can be used to improve accuracy 
+
+3. Rewrite dataset class
+
+- Add spectrogram converter function to dataset class
+- Write these images to files and then save files to Google Disk   
+- Spectrogram hyperparameters can impact dimensionality (size of image) of the resulting image. 
