@@ -1,3 +1,5 @@
+In reading the LiT and CLIP model papers carefully, I found that they were using image-text pairs for training whereas I was using text-np.arrays (of ECG signals) for training... this is a possibility. 
+
 Due to model convergence issues with the original pipeline the new idea is as follows:
 
 1. Convert ECG signals into images of spectrograms (12 channels; 1 image for each lead) 
