@@ -1,0 +1,79 @@
+1. Handling Imbalanced Classes:
+
+- There is a data imbalance in PTB/PTB-XL and across all other datasets in PhysioNet 2021 Challenge. 
+
+- The majority classes significantly outweigh the minority classes and sample sizes vary accordingly. 
+
+- There are many instances of abnormal ECGs which contain 4+ labels/diagnosis classes with only only instance. 
+
+There are many ways to handle datasets with imbalanced classes: 
+
+a) Resampling the minority class
+
+Pros: 
+- Easy to implement
+- Helps balance class distrubtion
+
+Cons:
+- Can potentially lead to overfitting 
+
+b) Class weighting
+- Giving more weight to minority classes.
+- Difficulty to implement unknown. 
+
+2. Curated Datasets
+
+- Similar to point 1, perhaps we may have to create a custom dataset containing classes with significant amount of records per class to work with. 
+
+3. Spectrograms
+
+a) Are they visually appropriate for CLIP Vision models (do they need x/y-axis labels, title, etc)?
+
+b) The SpectrogramGenerator class is time and computationally expensive. 
+
+- Generating 3 spectrogram images (Image width: 3201, Image height: 1407) per record is a slow process. It's possible to change this class configuration and hardcode the image height and width but that may have negative impacts with the CLIPImageProcessor (certain models use certain image dimensions). 
+
+- It may also not be a good idea to hardcode image dimensionality because it creates a bottleneck in case we want to experiment with other image dimenisons
+
+c) Resampling all data vs generating spectrograms with original frequencies
+
+- The SpectrogramGenerator class allows us to specifiy the sampling frequency for the input data. We can use the .shape/.size function to dynamically get the sampling frequency of any dataset and record. 
+
+- Resampling data might augment data negatively so it may be worth it to keep original dimensionality for data. 
+
+- In a practical setting, if a clinician/someone else were to use our pre-trained CLIP model for ECGs, they should be able to use any type of ECG signal, regardless of its dimensionality. 
+
+
+----- 
+Experiment A (Updated Plan):
+
+- Ignore classes with less than 100 instances to create curated datasets of most popular classes. Possibly consider this as a hyperparameter at the beginning of the pipeline. 
+
+1. Remove noise from ECG signals and resample across different modalities consistently: 
+
+- https://jscholaronline.org/articles/JBER/Signal-Processing.pdf
+
+- https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7013956/pdf/sensors-20-00373.pdf
+
+2. Spectrograms do not require title, x-axis, y-axis labels, intensity scale. Just Image of spectrogram. 
+
+- Calculating accuracy_score: CLIP model should be trained on all diagnosis classes for each record. Then during testing, the CLIP model compares the embedding of all possible, individual classes, to the embedding of the ECG signal. If the most similar class is among true labels of the ECG, then it's a true positive. Else, it's false-positive. 
+
+3. Use Scipy's spectrogram; faster than matplotlibb specgram.
+
+- https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html
+
+- Dimensionality will be different with scipy spectrogram.
+- Look into CLIP Image Processor's scaling of spectrograms. 
+- It's possible than log scale of spectrograms is more representative than standard normal scaling. 
+
+4. Remove all samples that are not 10 seconds in length. 
+
+5. Try ResNet50 or simple low sized ResNet50 model or less intense on data.
+
+- The built in CLIP loss function.
+
+- Resampling of ECG signal can be done by scipy spectrograms 
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html
+
+https://www.mathworks.com/matlabcentral/answers/uploaded_files/1265090/image.png
