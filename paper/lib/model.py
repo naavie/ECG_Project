@@ -3,6 +3,10 @@ from torch import nn
 import torch.nn.functional as F
 from transformers import AutoTokenizer, AutoModel
 
+import lib.ISIBrno_model
+import lib.RNN_model
+import lib.CNN_model
+
 
 _ACTIVATION_DICT = {'relu': nn.ReLU,
                     'tanh': nn.Tanh,
@@ -70,9 +74,7 @@ class LinearBlock(nn.Module):
 class ConvEncoder(nn.Module):
     def __init__(self, in_channels, channels, kernels, bn=True, dropout=None, maxpool=2, padding=0, stride=None):
         super().__init__()
-
-
-
+        
         num_layers = len(channels)
         if stride is None:
             stride = [1] * num_layers
@@ -90,8 +92,8 @@ class ConvEncoder(nn.Module):
             x = layer(x)
         return x
 
-    
-class ECGEncoder(nn.Module):
+
+class ECGConvEncoder(nn.Module):
     def __init__(self, config):
         
         super().__init__()
@@ -123,6 +125,24 @@ class ECGEncoder(nn.Module):
         x = self.out_layer(x)
         return x
 
+class ECGEncoder(nn.Module):
+    def __init__(self, config):
+        
+        super().__init__()
+        if config.ecg_encoder_model == 'ECGConvEncoder':
+            self.ecg_encoder = ECGConvEncoder(config)
+        elif config.ecg_encoder_model == 'ISIBrno_model':
+            self.ecg_encoder = lib.ISIBrno_model.NN(config.ecg_embedding_size)
+        elif config.ecg_encoder_model == 'RNN_model':
+            self.ecg_encoder = lib.RNN_model.NN(config.ecg_embedding_size)
+        elif config.ecg_encoder_model == 'CNN_model':
+            self.ecg_encoder = lib.CNN_model.NN(config.ecg_embedding_size)
+        else:
+            raise ValueError('Unknown ECG encoder type')
+
+    def forward(self, x):
+        x = self.ecg_encoder(x)
+        return x
 
 class TextEncoder(nn.Module):
     def __init__(self, config):

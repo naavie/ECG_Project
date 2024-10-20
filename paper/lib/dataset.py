@@ -5,7 +5,8 @@ from tqdm import tqdm
 import cv2
 import numpy as np
 
-from lib.utils import load_wsdb, generate_string_hash, load_h5
+from lib.utils import generate_string_hash
+from lib.datasets import code15, ptb_xl, sph
 
 class CLIP_ECG_Dataset(torch.utils.data.Dataset):
     def __init__(self, df, config):
@@ -37,9 +38,11 @@ def load_and_preprocess(ecg_file, new_sr, cache_path,  config):
     if not os.path.isfile(cache_name):
         
         if ecg_file.endswith('.hea'):
-            ecg, leads, old_sr = load_wsdb(ecg_file) 
+            ecg, leads, old_sr = ptb_xl.load_ecg(ecg_file) 
         elif ecg_file.endswith('.h5'):
-            ecg, leads, old_sr = load_h5(ecg_file) 
+            ecg, leads, old_sr = sph.load_ecg(ecg_file) 
+        elif ecg_file.endswith('.hdf5'):
+            ecg, leads, old_sr = code15.load_ecg(ecg_file) 
         else:
             raise ValueError('Unsupported ECG format')
 
@@ -51,6 +54,11 @@ def load_and_preprocess(ecg_file, new_sr, cache_path,  config):
 
         if ecg.shape[1] > config.window:
             ecg = ecg[:, :config.window]
+
+        if ecg.shape[1] < config.window:
+            padded_ecg = np.zeros((ecg.shape[0], config.window), dtype=ecg.dtype)
+            padded_ecg[:, :ecg.shape[1]] = ecg
+            ecg = padded_ecg
         
         np.save(cache_name, ecg)
 
