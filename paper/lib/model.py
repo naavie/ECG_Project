@@ -24,6 +24,10 @@ class Conv1dBlock(nn.Module):
         if padding is None or padding == 'same':
             padding = kernel_size // 2
 
+        if kernel_size == 1:
+            maxpool = None
+            stride = 1
+
         self.conv = nn.Conv1d(in_channels, out_channels, kernel_size, padding=padding, bias=not bn, stride=stride)
         self.bn = nn.BatchNorm1d(out_channels) if bn else None
         self.act = _ACTIVATION_DICT[act]()
@@ -129,7 +133,7 @@ class ECGEncoder(nn.Module):
     def __init__(self, config):
         
         super().__init__()
-        if config.ecg_encoder_model == 'ECGConvEncoder':
+        if config.ecg_encoder_model in ['ECGConvEncoder', 'ECGConvEncoder_v2', 'ECGConvEncoder_v3']:
             self.ecg_encoder = ECGConvEncoder(config)
         elif config.ecg_encoder_model == 'ISIBrno_model':
             self.ecg_encoder = lib.ISIBrno_model.NN(config.ecg_embedding_size)
