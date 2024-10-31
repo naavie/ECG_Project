@@ -3,9 +3,8 @@ import json
 
 import pandas as pd
 import torch
-from sklearn.model_selection import train_test_split
 
-import lib.datasets
+
 import lib.utils
 import lib.dataset
 import lib.model
@@ -21,60 +20,28 @@ def run_experiments(config):
 
     train_datasets = list()
     for ds in config.train_datasets:
-        __import__(f'lib.datasets.{ds}')
-        df = lib.datasets.__dict__[ds].load_df()
-        df['dataset'] = ds
-        df['patient_id'] = df['dataset'] + '_' + df['patient_id'].apply(str)
+        df = pd.read_csv(f'docs/{ds}.csv')
         train_datasets.append(df)
 
     df = pd.concat(train_datasets, ignore_index=True)
 
-    patients = df['patient_id'].unique()
-
-    train_patients, test_patients = train_test_split(patients, test_size=config.test_size, random_state=config.seed)
-    train_patients, valid_patients = train_test_split(train_patients, test_size=config.valid_size, random_state=config.seed)
-
-    train = df[df['patient_id'].isin(train_patients)]
-    valid = df[df['patient_id'].isin(valid_patients)]
-    test = df[df['patient_id'].isin(test_patients)]
-
-
-    train_classes =  lib.utils.calsses_from_captions(train['label'].values, threshold=config.min_class_count)
-    valid_classes =  lib.utils.calsses_from_captions(valid['label'].values, threshold=config.min_class_count)
-    test_classes = lib.utils.calsses_from_captions(test['label'].values, threshold=config.min_class_count)
-   
-    train_classes = [class_ for class_ in train_classes if class_ not in config.excluded_classes]
-    train_classes = [class_ for class_ in train_classes if class_ != config.normal_class]
-    valid_classes = [class_ for class_ in valid_classes if class_ in train_classes]
-    test_classes = [class_ for class_ in test_classes if class_ in train_classes]
+    max_fold = df['fold'].max()
     
-    test_classes, zero_shot_classes = train_test_split(test_classes, test_size=config.zero_shot_classes_size, random_state=config.seed)  
-    train_classes = [class_ for class_ in train_classes if class_ not in zero_shot_classes]
-    valid_classes = [class_ for class_ in valid_classes if class_ not in zero_shot_classes]
- 
-    train_classes.append(config.normal_class)
-    valid_classes.append(config.normal_class)
-    test_classes.append(config.normal_class)
+    test_fold = config.test_fold
+    valid_fold = config.valid_fold
 
     
-    train_classes = sorted(train_classes)
-    valid_classes = sorted(valid_classes)
-    test_classes = sorted(valid_classes)
-    zero_shot_classes = sorted(zero_shot_classes)
+    test_mask = df['fold'] == test_fold
+    valid_mask = df['fold'] == valid_fold
+    train_mask = (~test_mask)&(~valid_mask)
     
-    print('Train/valid/test classes counts:', len(train_classes), len(valid_classes), len(test_classes), len(zero_shot_classes))
+    train = df[train_mask].copy()
+    valid = df[valid_mask].copy()
+    test = df[test_mask].copy()
 
-    train = train.copy()
-    valid = valid.copy()
-    
-    train['label'] = lib.utils.remove_classes(zero_shot_classes, train['label'].to_list())
-    valid['label'] = lib.utils.remove_classes(zero_shot_classes, valid['label'].to_list())
-
-
-    config.train_classes = train_classes
-    config.valid_classes = valid_classes
-    config.test_classes = test_classes
-    config.zero_shot_classes = zero_shot_classes
+    print(f'Train size: {train.shape[0]}. Number of patients: {train["patient_id"].nunique()}',)
+    print(f'Valid size: {valid.shape[0]}. Number of patients: {valid["patient_id"].nunique()}',)
+    print(f'Test size: {test.shape[0]}. Number of patients: {test["patient_id"].nunique()}',)
     
     train_ds = lib.dataset.CLIP_ECG_Dataset(train, config)
     valid_ds = lib.dataset.CLIP_ECG_Dataset(valid, config)
@@ -99,16 +66,16 @@ def run_experiments(config):
         hrow = dict()
         hrow['epoch'] = epoch
         net.train()
-        train_loss_meter, train_accuracy_meter = lib.training.train_epoch(net, train_dl, optimizer, train_classes, config)
+        train_loss_meter, train_accuracy_meter = lib.training.train_epoch(net, train_dl, optimizer, config.train_classes, config)
         hrow['train_loss'] = train_loss_meter.avg
         
-        metrics = lib.training.valid_epoch(net, train_dl, train_classes, config) 
+        metrics = lib.training.valid_epoch(net, train_dl, config.train_classes, config) 
         hrow.update({f'train_{key}': val for key, val in metrics.items()})
         #hrow['train_mean_rocaucs'] = np.mean([val for key, val in metrics.items() if key.endswith('_rocauc') and val is not None])
         #hrow['train_mean_praucs'] = np.mean([val for key, val in metrics.items() if key.endswith('_prauc') and val is not None])
         print('Train:', hrow['train_mean_rocaucs'], hrow['train_mean_praucs'])
         
-        metrics = lib.training.valid_epoch(net, valid_dl, valid_classes, config) 
+        metrics = lib.training.valid_epoch(net, valid_dl, config.train_classes, config) 
         hrow.update({f'valid_{key}': val for key, val in metrics.items()})
         #hrow['valid_mean_rocaucs'] = np.mean([val for key, val in metrics.items() if key.endswith('_rocauc') and val is not None])
         #hrow['valid_mean_praucs'] = np.mean([val for key, val in metrics.items() if key.endswith('_prauc') and val is not None])
@@ -133,10 +100,10 @@ def run_experiments(config):
     
         test_ds = lib.dataset.CLIP_ECG_Dataset(test_subset, config)
         test_dl = torch.utils.data.DataLoader(test_ds, batch_size=config.batch_size, num_workers=config.num_workers, shuffle=False)
-        metrics = lib.training.valid_epoch(net, test_dl, config.test_classes, config) 
+        metrics = lib.training.valid_epoch(net, test_dl, config.train_classes, config) 
         config.test_metrics[test_ds_name] = metrics
     
-        metrics = lib.training.valid_epoch(net, test_dl, config.zero_shot_classes, config) 
+        metrics = lib.training.valid_epoch(net, test_dl, config.zeroshot_classes, config) 
         config.zero_shot_test_metrics[test_ds_name] = metrics
 
     config.exp2_classes = dict()
@@ -147,21 +114,14 @@ def run_experiments(config):
     
     for exp2_ds_name in config.test_datasets:
         
-        __import__(f'lib.datasets.{exp2_ds_name}')
-        df = lib.datasets.__dict__[exp2_ds_name].load_df()
-        df['dataset'] = exp2_ds_name
-        df['patient_id'] = df['dataset'] + '_' + df['patient_id'].apply(str)
-      
-        config.exp2_classes[exp2_ds_name] = lib.utils.calsses_from_captions(df['label'].values, threshold=config.min_class_count)
-        config.exp2_trained_classes[exp2_ds_name] = list(set(config.exp2_classes[exp2_ds_name]) & set(config.train_classes))
-        config.exp2_untrained_classes[exp2_ds_name] = list(set(config.exp2_classes[exp2_ds_name]) - set(config.train_classes))
+        df = pd.read_csv(f'docs/{ds}.csv')
 
         test_ds = lib.dataset.CLIP_ECG_Dataset(df, config)
         test_dl = torch.utils.data.DataLoader(test_ds, batch_size=config.batch_size, num_workers=config.num_workers, shuffle=True)
-        metrics = lib.training.valid_epoch(net, test_dl, config.exp2_trained_classes[exp2_ds_name], config) 
+        metrics = lib.training.valid_epoch(net, test_dl, config.train_classes, config) 
         config.exp2_metrics_trained[exp2_ds_name] = metrics
 
-        metrics = lib.training.valid_epoch(net, test_dl, config.exp2_untrained_classes[exp2_ds_name], config) 
+        metrics = lib.training.valid_epoch(net, test_dl, config.zeroshot_classes, config) 
         config.exp2_metrics_untrained[exp2_ds_name] = metrics
  
     cfg = {k:v for k, v in config.__dict__.items() if not k.startswith('__')}

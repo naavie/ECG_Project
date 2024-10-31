@@ -172,8 +172,8 @@ def load_ann(file):
 def load_dxs(file):
     ann = load_ann(file)
     code_list = [DECODE_DICT[key][1] for key, val in ann.items() if key in DECODE_DICT]
-    if len(code_list) == 1 and code_list[0] == 'sinus rhythm':
-        code_list = ['normal ecg', ]
-    else:
-        code_list = [code for code in code_list if code != 'sinus rhythm']
+    #if len(code_list) == 1 and code_list[0] == 'sinus rhythm':
+    #    code_list = ['normal ecg', ]
+    #else:
+    #    code_list = [code for code in code_list if code != 'sinus rhythm']
     return ', '.join(code_list)

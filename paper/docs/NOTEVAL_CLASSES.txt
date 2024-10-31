@@ -1,0 +1,66 @@
+2:1 av block
+2nd degree av block
+accelerated junctional rhythm
+acute myocardial infarction
+acute myocardial ischemia
+advanced (high-grade)
+anterior ischemia
+anteroseptal mi
+atrial fibrillation and flutter
+atrial flutter
+atrial hypertrophy
+atrial pacing pattern
+atrial tachycardia
+atrioventricular junctional rhythm
+av block
+av conduction ratio n:d
+blocked premature atrial contraction
+bundle branch block
+complete heart block
+decreased qt interval
+early repolarization
+fusion beats
+incomplete left bundle branch block
+junctional escape
+junctional premature complex
+junctional tachycardia
+lateral ischaemia
+left atrial abnormality
+left atrial hypertrophy
+mobitz type i (wenckebach)
+mobitz type i wenckebach atrioventricular block
+mobitz type ii
+nonconducted
+normal ecg
+paroxysmal supraventricular tachycardia
+paroxysmal ventricular tachycardia
+premature ventricular contractions
+prolonged qt interval
+r wave abnormal
+right atrial abnormality
+right atrial hypertrophy
+right ventricular hypertrophy
+short pr interval
+shortened pr interval
+sinoatrial block
+st elevation
+st interval abnormal
+st-t change due to ventricular hypertrophy
+supraventricular tachycardia
+suspect arm ecg leads reversed
+tu fusion
+u wave abnormal
+varying conduction
+ventricular bigeminy
+ventricular escape beat
+ventricular escape rhythm
+ventricular fibrillation
+ventricular flutter
+ventricular hypertrophy
+ventricular pacing pattern
+ventricular pre excitation
+ventricular preexcitation
+ventricular premature beats
+ventricular trigeminy
+wandering atrial pacemaker
+wolff parkinson white pattern

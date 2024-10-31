@@ -17,8 +17,8 @@ def load_df():
             for key, val in decode_dict_code15.items():
                 if row[key]:
                     result.append(val)
-            if len(result) == 0:
-                result.append('normal ecg')
+            #if len(result) == 0:
+            #    result.append('normal ecg')
             return ', '.join(result)
 
     path = '/ayb/vol1/datasets/ecg_datasets/code15'

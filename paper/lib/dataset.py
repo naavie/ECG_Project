@@ -14,7 +14,7 @@ class CLIP_ECG_Dataset(torch.utils.data.Dataset):
         self.config = config
         
         self.ecg_files = self.df['ecg_file'].values
-        self.captions = self.df['label'].values
+        self.captions = self.df['train_label'].values
 
         self.ecgs = load_and_preprocess_list(self.ecg_files, self.config, config.cache_path)
         

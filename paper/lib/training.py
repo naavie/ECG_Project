@@ -20,7 +20,9 @@ def calc_metrics(image_embeddings, captions, class_embeddings, class_names):
     for i, name in enumerate(class_names):
         
         true = np.array([name in caption for caption in captions]).astype('int32')
-        
+        results[f'{name}_trues'] = int(true.sum())
+        results[f'{name}_samples'] = int(true.shape[0])
+        results[f'{name}_freq'] = float(true.sum() / true.shape[0])
         if true.std() > 0:
             results[f'{name}_rocauc'] = roc_auc_score(true, similarity[:, i])
             results[f'{name}_prauc'] = average_precision_score(true, similarity[:, i])

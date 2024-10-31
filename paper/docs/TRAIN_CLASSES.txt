@@ -1,0 +1,27 @@
+abnormal qrs
+anterior myocardial infarction
+complete right bundle branch block
+indeterminate cardiac axis
+inferior ischaemia
+left anterior fascicular block
+left atrial enlargement
+left axis deviation
+left posterior fascicular block
+left ventricular hypertrophy
+low qrs voltages
+myocardial infarction
+myocardial ischemia
+nonspecific intraventricular conduction disorder
+nonspecific st t abnormality
+pacing rhythm
+premature atrial contraction
+prolonged pr interval
+qwave abnormal
+right axis deviation
+s t changes
+sinus arrhythmia
+st depression
+supraventricular premature beats
+t wave abnormal
+t wave inversion
+ventricular ectopics
