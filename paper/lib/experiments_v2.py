@@ -9,7 +9,7 @@ import lib.utils
 import lib.dataset
 import lib.model
 import lib.training
-
+import lib.pretrain
 
 
 def run_experiments(config):
@@ -50,12 +50,21 @@ def run_experiments(config):
     valid_dl = torch.utils.data.DataLoader(valid_ds, batch_size=config.batch_size, num_workers=config.num_workers, shuffle=False)
     
     net = lib.model.CLIPModel(config)
+
+    if config.pretrained:
+        pretrain_name = config.name.removesuffix('_pretrained') + '_pretrain'
+        pretrain = lib.pretrain.ClassificationNet(config)
+        pretrain.load_state_dict(torch.load(config.models_path + f'/{pretrain_name}.pt', weights_only=True))
+        net.image_encoder = pretrain.encoder
+    
     net = net.to(config.device)
     params = [
         {"params": net.image_encoder.parameters(), "lr": config.image_encoder_lr},
         {"params": net.image_projection.parameters(), "lr": config.head_lr},
         {"params": net.text_projection.parameters(), "lr": config.head_lr},
     ]
+
+    
     
     optimizer = torch.optim.Adam(params)
     
@@ -106,15 +115,12 @@ def run_experiments(config):
         metrics = lib.training.valid_epoch(net, test_dl, config.zeroshot_classes, config) 
         config.zero_shot_test_metrics[test_ds_name] = metrics
 
-    config.exp2_classes = dict()
-    config.exp2_trained_classes = dict()
-    config.exp2_untrained_classes = dict()
     config.exp2_metrics_trained = dict()
     config.exp2_metrics_untrained = dict()
     
     for exp2_ds_name in config.test_datasets:
         
-        df = pd.read_csv(f'docs/{ds}.csv')
+        df = pd.read_csv(f'docs/{exp2_ds_name}.csv')
 
         test_ds = lib.dataset.CLIP_ECG_Dataset(df, config)
         test_dl = torch.utils.data.DataLoader(test_ds, batch_size=config.batch_size, num_workers=config.num_workers, shuffle=True)

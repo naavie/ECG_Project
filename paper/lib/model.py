@@ -141,6 +141,10 @@ class ECGEncoder(nn.Module):
             self.ecg_encoder = lib.RNN_model.NN(config.ecg_embedding_size)
         elif config.ecg_encoder_model == 'CNN_model':
             self.ecg_encoder = lib.CNN_model.NN(config.ecg_embedding_size)
+        elif config.ecg_encoder_model == 'CNN_model_v2':
+            self.ecg_encoder = lib.CNN_model.NN_v2(config.ecg_embedding_size)
+        elif config.ecg_encoder_model == 'CNN_model_v3':
+            self.ecg_encoder = lib.CNN_model.NN_v3(config.ecg_embedding_size)
         else:
             raise ValueError('Unknown ECG encoder type')
 

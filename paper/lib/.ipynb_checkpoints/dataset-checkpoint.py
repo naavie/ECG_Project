@@ -5,7 +5,8 @@ from tqdm import tqdm
 import cv2
 import numpy as np
 
-from lib.utils import load_wsdb, generate_string_hash, load_h5
+from lib.utils import generate_string_hash
+from lib.datasets import code15, ptb_xl, sph
 
 class CLIP_ECG_Dataset(torch.utils.data.Dataset):
     def __init__(self, df, config):
@@ -13,7 +14,7 @@ class CLIP_ECG_Dataset(torch.utils.data.Dataset):
         self.config = config
         
         self.ecg_files = self.df['ecg_file'].values
-        self.captions = self.df['label'].values
+        self.captions = self.df['train_label'].values
 
         self.ecgs = load_and_preprocess_list(self.ecg_files, self.config, config.cache_path)
         
@@ -29,6 +30,36 @@ class CLIP_ECG_Dataset(torch.utils.data.Dataset):
         new_shape = int(self.config.ecg_sr * ecg.shape[1] / sr)
         ecg = resample(ecg, new_shape)
         return ecg
+
+class CLIP_ECG_Pretrain_Dataset(torch.utils.data.Dataset):
+    def __init__(self, df, config):
+        self.df = df
+        self.config = config
+        
+        self.ecg_files = self.df['ecg_file'].values
+        self.captions = self.df['train_label'].values
+
+
+        targets = list()
+        for i, name in enumerate(self.config.train_classes):
+            class_mask = df['train_label'].apply(lambda x: name in x).values.astype('uint8')
+            targets.append(class_mask)
+        self.targets = np.stack(targets)
+        self.ecgs = load_and_preprocess_list(self.ecg_files, self.config, config.cache_path)
+        
+    def __len__(self, ):
+        return len(self.df)
+
+    def __getitem__(self, idx):
+        caption = self.captions[idx]
+        image = self.ecgs[idx]
+        targets = self.targets[:, idx].astype('float32')
+        return {'image': image, 'caption': caption, 'targets': targets}
+        
+    def process_ecg(self, ecg, sr):
+        new_shape = int(self.config.ecg_sr * ecg.shape[1] / sr)
+        ecg = resample(ecg, new_shape)
+        return ecg
     
 def load_and_preprocess(ecg_file, new_sr, cache_path,  config):
     ecg_file_adj = f'{ecg_file}_{new_sr}'
@@ -37,9 +68,11 @@ def load_and_preprocess(ecg_file, new_sr, cache_path,  config):
     if not os.path.isfile(cache_name):
         
         if ecg_file.endswith('.hea'):
-            ecg, leads, old_sr = load_wsdb(ecg_file) 
+            ecg, leads, old_sr = ptb_xl.load_ecg(ecg_file) 
         elif ecg_file.endswith('.h5'):
-            ecg, leads, old_sr = load_h5(ecg_file) 
+            ecg, leads, old_sr = sph.load_ecg(ecg_file) 
+        elif ecg_file.endswith('.hdf5'):
+            ecg, leads, old_sr = code15.load_ecg(ecg_file) 
         else:
             raise ValueError('Unsupported ECG format')
 
@@ -51,6 +84,11 @@ def load_and_preprocess(ecg_file, new_sr, cache_path,  config):
 
         if ecg.shape[1] > config.window:
             ecg = ecg[:, :config.window]
+
+        if ecg.shape[1] < config.window:
+            padded_ecg = np.zeros((ecg.shape[0], config.window), dtype=ecg.dtype)
+            padded_ecg[:, :ecg.shape[1]] = ecg
+            ecg = padded_ecg
         
         np.save(cache_name, ecg)
 

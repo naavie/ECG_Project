@@ -14,7 +14,6 @@ def load_df():
     df = df[['ecg_file', 'patient_id', 'label']]
     return df
 
-
 def remove_nonprimary_code(x):
     r = []
     for cx in x:

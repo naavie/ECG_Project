@@ -30,6 +30,36 @@ class CLIP_ECG_Dataset(torch.utils.data.Dataset):
         new_shape = int(self.config.ecg_sr * ecg.shape[1] / sr)
         ecg = resample(ecg, new_shape)
         return ecg
+
+class CLIP_ECG_Pretrain_Dataset(torch.utils.data.Dataset):
+    def __init__(self, df, config):
+        self.df = df
+        self.config = config
+        
+        self.ecg_files = self.df['ecg_file'].values
+        self.captions = self.df['train_label'].values
+
+
+        targets = list()
+        for i, name in enumerate(self.config.train_classes):
+            class_mask = df['train_label'].apply(lambda x: name in x).values.astype('uint8')
+            targets.append(class_mask)
+        self.targets = np.stack(targets)
+        self.ecgs = load_and_preprocess_list(self.ecg_files, self.config, config.cache_path)
+        
+    def __len__(self, ):
+        return len(self.df)
+
+    def __getitem__(self, idx):
+        caption = self.captions[idx]
+        image = self.ecgs[idx]
+        targets = self.targets[:, idx].astype('float32')
+        return {'image': image, 'caption': caption, 'targets': targets}
+        
+    def process_ecg(self, ecg, sr):
+        new_shape = int(self.config.ecg_sr * ecg.shape[1] / sr)
+        ecg = resample(ecg, new_shape)
+        return ecg
     
 def load_and_preprocess(ecg_file, new_sr, cache_path,  config):
     ecg_file_adj = f'{ecg_file}_{new_sr}'

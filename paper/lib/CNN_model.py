@@ -53,7 +53,7 @@ class MyResidualBlock(nn.Module):
 
 class NN(nn.Module):
     def __init__(self, embedding_dim):
-        super(NN,self).__init__()
+        super().__init__()
         self.conv = nn.Conv2d(in_channels = 12,
                               out_channels = 256,
                               kernel_size = (1, 5),
@@ -85,6 +85,118 @@ class NN(nn.Module):
         x = F.dropout(x,p=0.5, training=self.training)
 
         x = self.rb_4(x)      
+
+        x = x.squeeze(2)
+        x = self.pool(x).squeeze(2)
+
+        x = self.fc_1(x)
+        return x
+
+class NN_v2(nn.Module):
+    def __init__(self, embedding_dim):
+        super().__init__()
+        self.conv = nn.Conv2d(in_channels = 12,
+                              out_channels = 256,
+                              kernel_size = (1, 5),
+                              padding = (0, 2),
+                              stride = (1, 2),
+                              bias = False)
+        
+        self.bn = nn.BatchNorm2d(256)
+        self.rb_0 = MyResidualBlock(downsample=True)
+        self.rb_0_add1 = MyResidualBlock(downsample=False)
+        self.rb_1 = MyResidualBlock(downsample=True)
+        self.rb_1_add1 = MyResidualBlock(downsample=False)
+        self.rb_2 = MyResidualBlock(downsample=True)
+        self.rb_2_add1 = MyResidualBlock(downsample=False)
+        self.rb_3 = MyResidualBlock(downsample=True)
+        self.rb_3_add1 = MyResidualBlock(downsample=False)
+
+        self.rb_4 = MyResidualBlock(downsample=False)
+        self.rb_4_add1 = MyResidualBlock(downsample=False)
+    
+        self.pool = nn.AdaptiveMaxPool1d(output_size=1)
+
+        self.fc_1 = nn.Linear(256, embedding_dim)
+
+
+    def forward(self, x):
+        x = F.leaky_relu(self.bn(self.conv(x[:, :, None, :])))
+
+        x = self.rb_0(x)
+        x = self.rb_0_add1(x)
+        x = self.rb_1(x)
+        x = self.rb_1_add1(x)
+        x = self.rb_2(x)
+        x = self.rb_2_add1(x)
+        x = self.rb_3(x)
+        x = self.rb_3_add1(x)
+
+        x = F.dropout(x,p=0.5, training=self.training)
+
+        x = self.rb_4(x)   
+        x = self.rb_4_add1(x)
+
+        x = x.squeeze(2)
+        x = self.pool(x).squeeze(2)
+
+        x = self.fc_1(x)
+        return x
+
+class NN_v3(nn.Module):
+    def __init__(self, embedding_dim):
+        super().__init__()
+        self.conv = nn.Conv2d(in_channels = 12,
+                              out_channels = 256,
+                              kernel_size = (1, 5),
+                              padding = (0, 2),
+                              stride = (1, 2),
+                              bias = False)
+        
+        self.bn = nn.BatchNorm2d(256)
+        self.rb_0 = MyResidualBlock(downsample=True)
+        self.rb_0_add1 = MyResidualBlock(downsample=False)
+        self.rb_0_add2 = MyResidualBlock(downsample=False)
+        self.rb_1 = MyResidualBlock(downsample=True)
+        self.rb_1_add1 = MyResidualBlock(downsample=False)
+        self.rb_1_add2 = MyResidualBlock(downsample=False)
+        self.rb_2 = MyResidualBlock(downsample=True)
+        self.rb_2_add1 = MyResidualBlock(downsample=False)
+        self.rb_2_add2 = MyResidualBlock(downsample=False)
+        self.rb_3 = MyResidualBlock(downsample=True)
+        self.rb_3_add1 = MyResidualBlock(downsample=False)
+        self.rb_3_add2 = MyResidualBlock(downsample=False)
+
+        self.rb_4 = MyResidualBlock(downsample=False)
+        self.rb_4_add1 = MyResidualBlock(downsample=False)
+        self.rb_4_add2 = MyResidualBlock(downsample=False)
+    
+        self.pool = nn.AdaptiveMaxPool1d(output_size=1)
+
+        self.fc_1 = nn.Linear(256, embedding_dim)
+
+
+    def forward(self, x):
+        x = F.leaky_relu(self.bn(self.conv(x[:, :, None, :])))
+
+        x = self.rb_0(x)
+        x = self.rb_0_add1(x)
+        x = self.rb_0_add2(x)
+        x = self.rb_1(x)
+        x = self.rb_1_add1(x)
+        x = self.rb_1_add2(x)
+        x = self.rb_2(x)
+        x = self.rb_2_add1(x)
+        x = self.rb_2_add2(x)
+        x = self.rb_3(x)
+        x = self.rb_3_add1(x)
+        x = self.rb_3_add2(x)
+
+        x = F.dropout(x,p=0.5, training=self.training)
+
+        x = self.rb_4(x)   
+        x = self.rb_4_add1(x)
+        x = self.rb_4_add2(x)
 
         x = x.squeeze(2)
         x = self.pool(x).squeeze(2)

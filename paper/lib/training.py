@@ -34,6 +34,26 @@ def calc_metrics(image_embeddings, captions, class_embeddings, class_names):
     results['mean_praucs'] = np.mean([val for key, val in results.items() if key.endswith('_prauc') and val is not None])
     return results 
 
+def calc_metrics_pretrain(trues, preds, class_names):
+    results = dict()
+    for i, name in enumerate(class_names):
+        
+        true = trues[:, i]
+        pred = preds[:, i]
+        results[f'{name}_trues'] = int(true.sum())
+        results[f'{name}_samples'] = int(true.shape[0])
+        results[f'{name}_freq'] = float(true.sum() / true.shape[0])
+        if true.std() > 0:
+            results[f'{name}_rocauc'] = roc_auc_score(true, pred)
+            results[f'{name}_prauc'] = average_precision_score(true, pred)
+        else:
+            results[f'{name}_rocauc'] = None
+            results[f'{name}_prauc'] = None          
+
+    results['mean_rocaucs'] = np.mean([val for key, val in results.items() if key.endswith('_rocauc') and val is not None])
+    results['mean_praucs'] = np.mean([val for key, val in results.items() if key.endswith('_prauc') and val is not None])
+    return results
+
 def calc_accuracy(image_embeddings, captions, class_embeddings, class_names):
     similarity = nxn_cos_sim(image_embeddings, class_embeddings, dim=1)
     predictions_ids = similarity.argmax(dim=1)
@@ -114,3 +134,59 @@ def valid_epoch(model, loader, classes, config):
     embeddings = torch.cat(embeddings)
     metric = calc_metrics(embeddings, captions, class_embeddings, classes)
     return metric
+
+
+def train_epoch_pretrain(model, loader, optimizer, classes, config):
+    losses = 0
+    model.train()
+    criterion = torch.nn.BCEWithLogitsLoss()
+    trues = list()
+    preds = list()
+    for batch in tqdm(loader): 
+
+        ecgs = batch['image'].to(config.device)
+        true = batch['targets'].to(config.device)
+        pred = model(ecgs)
+        loss = criterion(pred, true)
+        
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        losses += loss.item()
+        trues.append(true)
+        preds.append(pred)
+
+    losses /= len(loader)
+
+    trues = torch.cat(trues).detach().cpu().numpy()
+    preds = torch.cat(preds).detach().cpu().numpy()
+
+    metrics = calc_metrics_pretrain(trues, preds, classes)
+
+    return losses, metrics
+
+def valid_epoch_pretrain(model, loader, classes, config):
+    losses = 0
+    model.eval()
+    criterion = torch.nn.BCEWithLogitsLoss()
+
+    trues = list()
+    preds = list()
+    with torch.no_grad():
+        for batch in tqdm(loader):
+            ecgs = batch['image'].to(config.device)
+            true = batch['targets'].to(config.device)
+            pred = model(ecgs)
+            loss = criterion(pred, true)
+            losses += loss.item()
+
+            trues.append(true)
+            preds.append(pred)
+            
+    losses /= len(loader)
+    
+    trues = torch.cat(trues).detach().cpu().numpy()
+    preds = torch.cat(preds).detach().cpu().numpy()
+    metrics = calc_metrics_pretrain(trues, preds, classes)
+    return losses, metrics
