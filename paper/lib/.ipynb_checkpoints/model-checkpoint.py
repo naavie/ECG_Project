@@ -157,10 +157,8 @@ class TextEncoder(nn.Module):
         super().__init__()
         
         self.config = config
-        if config.pretrained:
-            self.model = AutoModel.from_pretrained(config.text_encoder_model)
-        else:
-            self.model = AutoModel.from_config(config.text_encoder_model)
+        self.model = AutoModel.from_pretrained(config.text_encoder_model)
+
             
         self.tokenizer = AutoTokenizer.from_pretrained(config.text_tokenizer)
 

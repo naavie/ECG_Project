@@ -4,6 +4,7 @@ import pandas as pd
 import torch
 from tqdm import tqdm
 import torch.nn.functional as F
+import sys
 
 
 def calc_metrics(image_embeddings, captions, class_embeddings, class_names):
@@ -30,8 +31,17 @@ def calc_metrics(image_embeddings, captions, class_embeddings, class_names):
             results[f'{name}_rocauc'] = None
             results[f'{name}_prauc'] = None          
 
-    results['mean_rocaucs'] = np.mean([val for key, val in results.items() if key.endswith('_rocauc') and val is not None])
-    results['mean_praucs'] = np.mean([val for key, val in results.items() if key.endswith('_prauc') and val is not None])
+    vals = [val for key, val in results.items() if key.endswith('_rocauc') and val is not None]
+    if len(vals) > 0:
+        results['mean_rocaucs'] = np.mean(vals)
+    else:
+        results['mean_rocaucs'] = None
+
+    vals = [val for key, val in results.items() if key.endswith('_prauc') and val is not None]
+    if len(vals) > 0:
+        results['mean_praucs'] = np.mean(vals)
+    else:
+        results['mean_praucs'] = None
     return results 
 
 def calc_metrics_pretrain(trues, preds, class_names):
@@ -87,7 +97,7 @@ class AvgMeter:
 
 
 def train_epoch(model, loader, optimizer, classes, config):
-    tqdm_object = tqdm(loader, total=len(loader))
+    tqdm_object = tqdm(loader, total=len(loader), desc='Train', file=sys.stdout)
     loss_meter = AvgMeter()
     accuracy_meter = AvgMeter()
     for batch in tqdm_object:
@@ -109,8 +119,6 @@ def train_epoch(model, loader, optimizer, classes, config):
         count = batch["image"].size(0)
         loss_meter.update(loss.item(), count)
         accuracy_meter.update(accuracy, count)
-
-        tqdm_object.set_postfix(train_loss=loss_meter.avg, train_accuracy=accuracy_meter.avg)
         
     return loss_meter, accuracy_meter
 
@@ -121,7 +129,7 @@ def valid_epoch(model, loader, classes, config):
     with torch.no_grad():
         class_embeddings = model.text_to_embeddings(classes).detach().cpu()
     
-    tqdm_object = tqdm(loader, total=len(loader))
+    tqdm_object = tqdm(loader, total=len(loader), desc='Eval', file=sys.stdout)
     embeddings = list()
     captions = list()
     with torch.no_grad():
@@ -142,7 +150,7 @@ def train_epoch_pretrain(model, loader, optimizer, classes, config):
     criterion = torch.nn.BCEWithLogitsLoss()
     trues = list()
     preds = list()
-    for batch in tqdm(loader): 
+    for batch in tqdm(loader, desc='Train', file=sys.stdout): 
 
         ecgs = batch['image'].to(config.device)
         true = batch['targets'].to(config.device)
@@ -174,7 +182,7 @@ def valid_epoch_pretrain(model, loader, classes, config):
     trues = list()
     preds = list()
     with torch.no_grad():
-        for batch in tqdm(loader):
+        for batch in tqdm(loader, desc='Eval', file=sys.stdout):
             ecgs = batch['image'].to(config.device)
             true = batch['targets'].to(config.device)
             pred = model(ecgs)

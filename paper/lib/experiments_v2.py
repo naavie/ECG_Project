@@ -20,7 +20,7 @@ def run_experiments(config):
 
     train_datasets = list()
     for ds in config.train_datasets:
-        df = pd.read_csv(f'docs/{ds}.csv')
+        df = pd.read_csv(f'docs/{ds}.csv').iloc[:config.limit]
         train_datasets.append(df)
 
     df = pd.concat(train_datasets, ignore_index=True)
@@ -42,9 +42,10 @@ def run_experiments(config):
     print(f'Train size: {train.shape[0]}. Number of patients: {train["patient_id"].nunique()}',)
     print(f'Valid size: {valid.shape[0]}. Number of patients: {valid["patient_id"].nunique()}',)
     print(f'Test size: {test.shape[0]}. Number of patients: {test["patient_id"].nunique()}',)
-    
-    train_ds = lib.dataset.CLIP_ECG_Dataset(train, config)
-    valid_ds = lib.dataset.CLIP_ECG_Dataset(valid, config)
+
+    print('Preparing data:')
+    train_ds = lib.dataset.CLIP_ECG_Dataset(train['ecg_file'].values, train['train_label'].values, config)
+    valid_ds = lib.dataset.CLIP_ECG_Dataset(valid['ecg_file'].values, valid['train_label'].values, config)
     
     train_dl = torch.utils.data.DataLoader(train_ds, batch_size=config.batch_size, num_workers=config.num_workers, shuffle=True)
     valid_dl = torch.utils.data.DataLoader(valid_ds, batch_size=config.batch_size, num_workers=config.num_workers, shuffle=False)
@@ -52,7 +53,8 @@ def run_experiments(config):
     net = lib.model.CLIPModel(config)
 
     if config.pretrained:
-        pretrain_name = config.name.removesuffix('_pretrained') + '_pretrain'
+        print('Loading pretrain:')
+        pretrain_name = config.name + '_pretrain'
         pretrain = lib.pretrain.ClassificationNet(config)
         pretrain.load_state_dict(torch.load(config.models_path + f'/{pretrain_name}.pt', weights_only=True))
         net.image_encoder = pretrain.encoder
@@ -63,11 +65,9 @@ def run_experiments(config):
         {"params": net.image_projection.parameters(), "lr": config.head_lr},
         {"params": net.text_projection.parameters(), "lr": config.head_lr},
     ]
-
-    
     
     optimizer = torch.optim.Adam(params)
-    
+    print('Main trainig loop:')
     history = list()
     best_valid_score = 0.0
     for epoch in range(config.epochs):
@@ -82,13 +82,13 @@ def run_experiments(config):
         hrow.update({f'train_{key}': val for key, val in metrics.items()})
         #hrow['train_mean_rocaucs'] = np.mean([val for key, val in metrics.items() if key.endswith('_rocauc') and val is not None])
         #hrow['train_mean_praucs'] = np.mean([val for key, val in metrics.items() if key.endswith('_prauc') and val is not None])
-        print('Train:', hrow['train_mean_rocaucs'], hrow['train_mean_praucs'])
+        print('Eval on train set:', hrow['train_mean_rocaucs'])
         
         metrics = lib.training.valid_epoch(net, valid_dl, config.train_classes, config) 
         hrow.update({f'valid_{key}': val for key, val in metrics.items()})
         #hrow['valid_mean_rocaucs'] = np.mean([val for key, val in metrics.items() if key.endswith('_rocauc') and val is not None])
         #hrow['valid_mean_praucs'] = np.mean([val for key, val in metrics.items() if key.endswith('_prauc') and val is not None])
-        print('Valid:', hrow['valid_mean_rocaucs'], hrow['valid_mean_praucs'])
+        print('Eval on valid set:', hrow['valid_mean_rocaucs'])
         
         history.append(hrow)
         pd.DataFrame(history).to_csv(config.logs_path + f'/{config.name}.csv', index=False)
@@ -105,13 +105,26 @@ def run_experiments(config):
     config.zero_shot_test_metrics = dict()
     
     for test_ds_name in test['dataset'].unique():
+        print(f'Testing on {test_ds_name}:')
         test_subset = test[test['dataset'] == test_ds_name]
-    
-        test_ds = lib.dataset.CLIP_ECG_Dataset(test_subset, config)
+
+        print()
+        print('Train classes:')
+        for class_name in config.train_classes:
+            print(f'{class_name}: {test_subset["fixed_label"].apply(lambda x: class_name in x).sum()}')
+
+        print()
+        print('Zeroshot classes:')
+        for class_name in config.zeroshot_classes:
+            print(f'{class_name}: {test_subset["fixed_label"].apply(lambda x: class_name in x).sum()}')
+        
+        print('Preparing data:')
+        test_ds = lib.dataset.CLIP_ECG_Dataset(test_subset['ecg_file'].values, test_subset['fixed_label'].values, config)
         test_dl = torch.utils.data.DataLoader(test_ds, batch_size=config.batch_size, num_workers=config.num_workers, shuffle=False)
+        print('Testing on train_classes:')
         metrics = lib.training.valid_epoch(net, test_dl, config.train_classes, config) 
         config.test_metrics[test_ds_name] = metrics
-    
+        print('Testing on zero_shot classes:')
         metrics = lib.training.valid_epoch(net, test_dl, config.zeroshot_classes, config) 
         config.zero_shot_test_metrics[test_ds_name] = metrics
 
@@ -119,14 +132,27 @@ def run_experiments(config):
     config.exp2_metrics_untrained = dict()
     
     for exp2_ds_name in config.test_datasets:
-        
-        df = pd.read_csv(f'docs/{exp2_ds_name}.csv')
+        print(f'Testing on {exp2_ds_name}:')
+        df = pd.read_csv(f'docs/{exp2_ds_name}.csv').iloc[:config.limit]
 
-        test_ds = lib.dataset.CLIP_ECG_Dataset(df, config)
+        print()
+        print('Train classes:')
+        for class_name in config.train_classes:
+            print(f'{class_name}: {df["fixed_label"].apply(lambda x: class_name in x).sum()}')
+
+        print()
+        print('Zeroshot classes:')
+        for class_name in config.zeroshot_classes:
+            print(f'{class_name}: {df["fixed_label"].apply(lambda x: class_name in x).sum()}')
+
+        print()
+        print('Preparing data:')
+        test_ds = lib.dataset.CLIP_ECG_Dataset(df['ecg_file'].values, df['fixed_label'].values, config)
         test_dl = torch.utils.data.DataLoader(test_ds, batch_size=config.batch_size, num_workers=config.num_workers, shuffle=True)
+        print('Testing on train_classes:')
         metrics = lib.training.valid_epoch(net, test_dl, config.train_classes, config) 
         config.exp2_metrics_trained[exp2_ds_name] = metrics
-
+        print('Testing on zero_shot classes:')
         metrics = lib.training.valid_epoch(net, test_dl, config.zeroshot_classes, config) 
         config.exp2_metrics_untrained[exp2_ds_name] = metrics
  

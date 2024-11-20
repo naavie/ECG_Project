@@ -1,4 +1,5 @@
 import os
+import sys
 
 import torch
 from tqdm import tqdm
@@ -9,17 +10,14 @@ from lib.utils import generate_string_hash
 from lib.datasets import code15, ptb_xl, sph
 
 class CLIP_ECG_Dataset(torch.utils.data.Dataset):
-    def __init__(self, df, config):
-        self.df = df
+    def __init__(self, ecg_files, captions, config):
         self.config = config
-        
-        self.ecg_files = self.df['ecg_file'].values
-        self.captions = self.df['train_label'].values
-
+        self.ecg_files = ecg_files
+        self.captions = captions
         self.ecgs = load_and_preprocess_list(self.ecg_files, self.config, config.cache_path)
         
     def __len__(self, ):
-        return len(self.df)
+        return len(self.ecg_files)
 
     def __getitem__(self, idx):
         caption = self.captions[idx]
@@ -32,23 +30,20 @@ class CLIP_ECG_Dataset(torch.utils.data.Dataset):
         return ecg
 
 class CLIP_ECG_Pretrain_Dataset(torch.utils.data.Dataset):
-    def __init__(self, df, config):
-        self.df = df
+    def __init__(self, ecg_files, captions, config):
         self.config = config
-        
-        self.ecg_files = self.df['ecg_file'].values
-        self.captions = self.df['train_label'].values
-
+        self.ecg_files = ecg_files
+        self.captions = captions
 
         targets = list()
         for i, name in enumerate(self.config.train_classes):
-            class_mask = df['train_label'].apply(lambda x: name in x).values.astype('uint8')
+            class_mask = np.array([name in caption for caption in self.captions]).astype('uint8')
             targets.append(class_mask)
         self.targets = np.stack(targets)
         self.ecgs = load_and_preprocess_list(self.ecg_files, self.config, config.cache_path)
         
     def __len__(self, ):
-        return len(self.df)
+        return len(self.ecg_files)
 
     def __getitem__(self, idx):
         caption = self.captions[idx]
@@ -104,5 +99,5 @@ def resample(ecg, shape):
 
 
 def load_and_preprocess_list(ecg_files, config, cache_path):
-    return np.stack([load_and_preprocess(ecg_file, config.ecg_sr, cache_path, config) for ecg_file in tqdm(ecg_files)])
+    return np.stack([load_and_preprocess(ecg_file, config.ecg_sr, cache_path, config) for ecg_file in tqdm(ecg_files, desc='Loading ecg files', file=sys.stdout)])
     
