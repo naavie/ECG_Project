@@ -1,0 +1,136 @@
+// MyResidualBlock -- No Labels -- Downsample = True
+digraph {
+	x [label=Input]
+	conv1 [label="Conv2d
+(1, 9)"]
+	bn1 [label=BatchNorm2d]
+	relu1 [label=LeakyReLU]
+	conv2 [label="Conv2d
+(1, 9)"]
+	bn2 [label=BatchNorm2d]
+	relu2 [label=LeakyReLU]
+	idfunc_0 [label="AvgPool2d
+(1, 2)"]
+	idfunc_1 [label="Conv2d
+(1, 1)"]
+	output [label=Output]
+	x -> conv1
+	conv1 -> bn1
+	bn1 -> relu1
+	relu1 -> conv2
+	conv2 -> bn2
+	bn2 -> relu2
+	x -> idfunc_0
+	idfunc_0 -> idfunc_1
+	idfunc_1 -> output
+	relu2 -> output
+}
+
+// MyResidualBlock -- No Labels -- Downsample = False
+digraph {
+	x [label=Input]
+	conv1 [label="Conv2d
+(1, 9)"]
+	bn1 [label=BatchNorm2d]
+	relu1 [label=LeakyReLU]
+	conv2 [label="Conv2d
+(1, 9)"]
+	bn2 [label=BatchNorm2d]
+	relu2 [label=LeakyReLU]
+	idfunc_0 [label="AvgPool2d
+(1, 2)"]
+	idfunc_1 [label="Conv2d
+(1, 1)"]
+	output [label=Output]
+	x -> conv1
+	conv1 -> bn1
+	bn1 -> relu1
+	relu1 -> conv2
+	conv2 -> bn2
+	bn2 -> relu2
+	x -> idfunc_0
+	idfunc_0 -> idfunc_1
+	idfunc_1 -> output
+	relu2 -> output
+}
+
+// MyResidualBlock -- With Labels -- Downsample = True
+digraph {
+	x [label="Input
+(Tensor)"]
+	conv1 [label="Conv2d
+(1, 9)
+(in_channels=256,
+out_channels=256,
+stride=(1, stride),
+padding=(0, 4),
+bias=False)"]
+	bn1 [label="BatchNorm2d
+(256)"]
+	relu1 [label=LeakyReLU]
+	conv2 [label="Conv2d
+(1, 9)
+(in_channels=256,
+out_channels=256,
+padding=(0, 4),
+bias=False)"]
+	bn2 [label="BatchNorm2d
+(256)"]
+	relu2 [label=LeakyReLU]
+	idfunc_0 [label="AvgPool2d
+(kernel_size=(1, 2),
+stride=(1, 2))"]
+	idfunc_1 [label="Conv2d
+(1, 1)
+(in_channels=256,
+out_channels=256,
+bias=False)"]
+	output [label="Output
+(Tensor)"]
+	x -> conv1 [label="identity = x"]
+	conv1 -> bn1
+	bn1 -> relu1
+	relu1 -> conv2
+	conv2 -> bn2
+	bn2 -> relu2
+	x -> idfunc_0 [label="if downsample:
+identity = idfunc_0(identity)"]
+	idfunc_0 -> idfunc_1 [label="identity = idfunc_1(identity)"]
+	idfunc_1 -> output [label="x = x + identity"]
+	relu2 -> output
+}
+
+// MyResidualBlock -- With Labels -- Downsample = False
+digraph {
+	x [label="Input
+(Tensor)"]
+	conv1 [label="Conv2d
+(1, 9)
+(in_channels=256,
+out_channels=256,
+stride=(1, stride),
+padding=(0, 4),
+bias=False)"]
+	bn1 [label="BatchNorm2d
+(256)"]
+	relu1 [label=LeakyReLU]
+	conv2 [label="Conv2d
+(1, 9)
+(in_channels=256,
+out_channels=256,
+padding=(0, 4),
+bias=False)"]
+	bn2 [label="BatchNorm2d
+(256)"]
+	relu2 [label=LeakyReLU]
+	output [label="Output
+(Tensor)"]
+	x -> conv1 [label="identity = x"]
+	conv1 -> bn1
+	bn1 -> relu1
+	relu1 -> conv2
+	conv2 -> bn2
+	bn2 -> relu2
+	x -> output [label="x = x + identity"]
+	relu2 -> output
+}
