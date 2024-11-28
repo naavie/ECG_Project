@@ -1,0 +1,16 @@
+,fold1,fold2,fold3,fold4
+seed,42,42,42,42
+batch_size,256,256,256,256
+ecg_sr,128,128,128,128
+text_embedding_size,768,768,768,768
+projection_dim,256,256,256,256
+text_encoder_model,emilyalsentzer/Bio_ClinicalBERT,emilyalsentzer/Bio_ClinicalBERT,emilyalsentzer/Bio_ClinicalBERT,emilyalsentzer/Bio_ClinicalBERT
+ecg_encoder_model,ISIBrno_model,ISIBrno_model,ISIBrno_model,ISIBrno_model
+ecg_embedding_size,512,512,512,512
+ecg_channels,12,12,12,12
+dropout,0.15,0.15,0.15,0.15
+temperature,10.0,10.0,10.0,10.0
+head_lr,0.0001,0.0001,0.0001,0.0001
+image_encoder_lr,0.001,0.001,0.001,0.001
+test_fold,0,0,0,0
+valid_fold,1,2,3,4
