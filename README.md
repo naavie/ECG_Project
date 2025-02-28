@@ -40,6 +40,38 @@ In this study, CLIP-based models are trained on a specific set of ECG diagnostic
 
 ## Results 
 
+| Training Classes                               | Zero-shot Classes                      |
+| ---------------------------------------------- | --------------------------------------- |
+| abnormal qrs                                   | 1st degree av block                    |
+| anterior myocardial infarction                 | atrial fibrillation                     |
+| complete right bundle branch block             | atrial premature complexes              |
+| indeterminate cardiac axis                     | incomplete right bundle branch block    |
+| inferior ischaemia                             | inferior mi                             |
+| left anterior fascicular block                 | left bundle branch block                |
+| left atrial enlargement                        | right bundle branch block               |
+| left axis deviation                            | sinus bradycardia                       |
+| left posterior fascicular block                | sinus tachycardia                       |
+| left ventricular hypertrophy                   | st deviation                            |
+| low qrs voltages                               | st deviation with t-wave change        |
+| myocardial infarction                          |                                         |
+| myocardial ischemia                            |                                         |
+| nonspecific intraventricular conduction disorder |                                         |
+| nonspecific st t abnormality                   |                                         |
+| pacing rhythm                                  |                                         |
+| premature atrial contraction                   |                                         |
+| prolonged pr interval                          |                                         |
+| qwave abnormal                                 |                                         |
+| right axis deviation                           |                                         |
+| s t changes                                    |                                         |
+| sinus arrhythmia                               |                                         |
+| st depression                                  |                                         |
+| supraventricular premature beats               |                                         |
+| t wave abnormal                                |                                         |
+| t wave inversion                               |                                         |
+| ventricular ectopics                           |                                         |
+
+**Table 1.** ECG diagnostic classes from all datasets used in Experiments A and B for model training/validation/testing as well as evaluation on zero-shot classes. A full list of classes excluded from all datasets is available in Supplementary Materials.
+
 ## References
 
 [1] Romera-Paredes, Bernardino, and Philip Torr. "An embarrassingly simple approach to zero-shot learning." International conference on machine learning. PMLR, 2015.
