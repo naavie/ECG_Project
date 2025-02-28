@@ -24,9 +24,9 @@ flexibility and robustness of ECG classification models
 
 ## Zero-shot Learning
 
-In machine learning (ML) and deep learning (DL) research, zero-shot learning describes the experimental paradigm for evaluating a model's ability to perform classification on unseen classes. Specifically, zero-shot learning evaluates a model's zero-shot classification performance, the capacity to correctly classify data classes beyond those a model was trained on. This approach can be particularly beneficial in real-world scenarios where it is unlikely to have fully annotated, multi-label datasets. In short, training ML/DL models with a zero-shot learning paradign can improve the potential of models to classify unseen and unlabeled data, both of which are inherent limitations of real-world datasets. 
+In machine learning (ML) and deep learning (DL) research, zero-shot learning describes the experimental paradigm for evaluating a model's ability to perform classification on unseen classes. Specifically, zero-shot learning evaluates a model's zero-shot classification performance, the capacity to correctly classify data classes beyond those a model was trained on [1,2]. This approach can be particularly beneficial in real-world scenarios where it is unlikely to have fully annotated, multi-label datasets. In short, training ML/DL models with a zero-shot learning paradign can improve the potential of models to classify unseen and unlabeled data, both of which are inherent limitations of real-world datasets.
 
-The zero-shot learning paradigm involves two key steps: (1) model training and (2) model inference. During model training, ML/DL models are trained on a defined set of known classes where models are expected to learn feature representations of their inputs. Then, during model inference, these models are evaluated for their performance on classes excluded during training to measure classification and generalization performance on new, unseen classes. 
+The zero-shot learning paradigm involves two key steps: (1) model training and (2) model inference [1]. During model training, ML/DL models are trained on a defined set of known classes where models are expected to learn feature representations of their inputs. Then, during model inference, these models are evaluated for their performance on classes excluded during training to measure classification and generalization performance on new, unseen classes [1,2]. 
 
 In this study, Contrastive Language–Image Pre-training (CLIP) based models are trained using the zero-shot learning framework. It is hypothesized that CLIP-based models are well suited for zero-shot learning for two key reasons. First, the joint training of image and text encoders enables better learning of the semantic relationships of ECG image-text pair inputs. Second, the contrastive loss function inherent to CLIP allows for effective discrimination between similar (positive instances) and dissimilar (negative instances) pairs of ECG image-tet embeddings, minimizing the distance between positive instances while maximizing the distance between negative instances.    
 
@@ -41,3 +41,7 @@ In this study, CLIP-based models are trained on a specific set of ECG diagnostic
 ## Results 
 
 ## References
+
+[1] Romera-Paredes, Bernardino, and Philip Torr. "An embarrassingly simple approach to zero-shot learning." International conference on machine learning. PMLR, 2015.
+
+[2] Xian, Yongqin, et al. "Zero-shot learning—a comprehensive evaluation of the good, the bad and the ugly." IEEE transactions on pattern analysis and machine intelligence 41.9 (2018): 2251-2265.
