@@ -36,3 +36,5 @@ In this study, CLIP-based models are trained on a specific set of ECG diagnostic
   <img src="https://github.com/user-attachments/assets/c756feee-8f2a-452a-9f1f-f08bfbebcad9" alt="ZeroShotLearning_ECGs drawio">
 </p>
 
+![White_ZeroShotLearning_ECGs drawio](https://github.com/user-attachments/assets/2cb2f4e8-a625-4003-8ddf-9a1fa5cf15dc)
+
