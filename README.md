@@ -110,6 +110,103 @@ In this study, CLIP-based models are trained on a specific set of ECG diagnostic
 
 ## Results
 
+The best CLIP-based models for seen & unseen classes in Experiment A and overall best model for Experiment B are outlined in Table 3.  
+
+| Model UID | Image Encoder Models | Text Encoders       | Training Datasets             | Experiment                     |
+| --------- | -------------------- | ------------------- | ----------------------------- | ------------------------------ |
+| 23        | CNN V2               | Bio_ClinicalBERT    | (PTB-XL, Ningbo, Georgia)     | Experiment A (Seen Classes)    |
+| 20        | CNN base             | Bio_ClinicalBERT    | (PTB-XL, Ningbo, Georgia)     | Experiment A (Unseen Classes)  |
+| 23        | CNN V2               | Bio_ClinicalBERT    | (PTB-XL, Ningbo, Georgia)     | Experiment B                   |
+
+**Table 3.** Best CLIP-based in Experiment A and B.
+
+| Model UID | PTB-XL Test Results | Ningbo Test Results | Georgia Test Results |
+| --------- | ------------------- | ------------------- | -------------------- |
+| 17        | 0.691±0.016         | -                   | -                    |
+| 7         | 0.716±0.011         | 0.726±0.024         | -                    |
+| 20        | 0.739±0.009         | 0.785±0.025         | 0.701±0.024          |
+| 3         | 0.711±0.014         | -                   | -                    |
+| 15        | 0.717±0.016         | 0.714±0.023         | -                    |
+| 23        | 0.730±0.017         | 0.802±0.032         | 0.710±0.016          |
+| 10        | 0.707±0.040         | -                   | -                    |
+| 22        | 0.719±0.013         | 0.761±0.023         | -                    |
+| 0         | 0.737±0.028         | 0.792±0.013         | 0.704±0.008          |
+| 6         | 0.696±0.013         | -                   | -                    |
+| 18        | 0.719±0.014         | 0.741±0.042         | -                    |
+| 9         | 0.739±0.018         | 0.751±0.008         | 0.718±0.018          |
+| 13        | 0.702±0.015         | -                   | -                    |
+| 2         | 0.684±0.010         | -                   | -                    |
+| 8         | 0.707±0.015         | 0.739±0.023         | -                    |
+| 4         | 0.690±0.007         | 0.708±0.011         | -                    |
+| 5         | 0.731±0.010         | 0.765±0.029         | 0.696±0.006          |
+| 19        | 0.706±0.009         | 0.711±0.024         | 0.667±0.010          |
+| 14        | 0.692±0.012         | -                   | -                    |
+| 16        | 0.720±0.008         | 0.733±0.021         | -                    |
+| 11        | 0.743±0.016         | 0.757±0.022         | 0.681±0.023          |
+| 21        | 0.694±0.009         | -                   | -                    |
+| 1         | 0.714±0.011         | 0.712±0.022         | -                    |
+| 12        | 0.725±0.016         | 0.760±0.013         | 0.694±0.010          |
+
+**Table 4.** Experiment A: Mean ROC-AUC scores with standard deviation for seen diagnostic classes in PTB-XL, Ningbo, and Georgia datasets. Fields denoted by "-" represents models for which mean ROC-AUC could not be computed due to these models not predicting at least one true positive sample for one or more ECG diagnostic classes.
+
+| Model UID | PTB-XL Zero-Shot | Ningbo Zero-Shot | Georgia Zero-Shot |
+| --------- | ----------------- | ----------------- | ------------------ |
+| 17        | 0.563±0.037       | -                 | -                  |
+| 7         | 0.613±0.017       | 0.641±0.014       | -                  |
+| 20        | 0.632±0.024       | 0.668±0.032       | 0.698±0.016        |
+| 3         | 0.541±0.021       | -                 | -                  |
+| 15        | 0.610±0.027       | 0.601±0.004       | -                  |
+| 23        | 0.615±0.035       | 0.640±0.015       | 0.698±0.009        |
+| 10        | 0.544±0.059       | -                 | -                  |
+| 22        | 0.599±0.017       | 0.646±0.023       | -                  |
+| 0         | 0.638±0.021       | 0.661±0.012       | 0.694±0.005        |
+| 6         | 0.596±0.019       | -                 | -                  |
+| 18        | 0.606±0.032       | 0.613±0.021       | -                  |
+| 9         | 0.641±0.046       | 0.604±0.019       | 0.676±0.030        |
+| 13        | 0.590±0.048       | -                 | -                  |
+| 2         | 0.565±0.006       | -                 | -                  |
+| 8         | 0.619±0.011       | 0.626±0.017       | -                  |
+| 4         | 0.583±0.013       | 0.580±0.010       | -                  |
+| 5         | 0.624±0.033       | 0.623±0.024       | 0.686±0.018        |
+| 19        | 0.573±0.026       | 0.598±0.034       | 0.649±0.006        |
+| 14        | 0.587±0.011       | -                 | -                  |
+| 16        | 0.600±0.039       | 0.551±0.034       | -                  |
+| 11        | 0.611±0.040       | 0.570±0.011       | 0.633±0.016        |
+| 21        | 0.585±0.024       | -                 | -                  |
+| 1         | 0.589±0.033       | 0.582±0.036       | -                  |
+| 12        | 0.623±0.020       | 0.616±0.030       | 0.686±0.005        |
+
+**Table 5.** Experiment A: Mean ROC-AUC scores with standard deviation for unseen (zero-shot) diagnostic classes in PTB-XL, Ningbo, and Georgia datasets. Fields denoted by "-" represents models for which mean ROC-AUC could not be computed due to these models not predicting at least one true positive sample for one or more ECG diagnostic classes.
+
+| Model UID | SPH Trained     | SPH Untrained   | CODE-15% Untrained |
+| --------- | --------------- | --------------- | ------------------ |
+| 17        | 0.698±0.034     | 0.568±0.043     | 0.578±0.042        |
+| 7         | 0.786±0.028     | 0.666±0.019     | 0.623±0.017        |
+| 20        | 0.817±0.016     | 0.665±0.028     | 0.636±0.019        |
+| 3         | 0.717±0.038     | 0.577±0.025     | 0.540±0.024        |
+| 15        | 0.784±0.038     | 0.670±0.038     | 0.608±0.029        |
+| 23        | 0.829±0.029     | 0.703±0.014     | 0.637±0.028        |
+| 10        | 0.703±0.081     | 0.585±0.091     | 0.579±0.064        |
+| 22        | 0.805±0.027     | 0.668±0.019     | 0.606±0.034        |
+| 0         | 0.817±0.024     | 0.682±0.029     | 0.634±0.024        |
+| 6         | 0.721±0.039     | 0.593±0.043     | 0.580±0.022        |
+| 18        | 0.783±0.029     | 0.637±0.044     | 0.596±0.025        |
+| 9         | 0.817±0.014     | 0.679±0.030     | 0.659±0.030        |
+| 13        | 0.735±0.017     | 0.607±0.044     | 0.600±0.043        |
+| 2         | 0.693±0.029     | 0.578±0.027     | 0.549±0.016        |
+| 8         | 0.772±0.022     | 0.669±0.022     | 0.590±0.027        |
+| 4         | 0.725±0.014     | 0.616±0.007     | 0.571±0.014        |
+| 5         | 0.799±0.017     | 0.679±0.015     | 0.608±0.018        |
+| 19        | 0.732±0.033     | 0.621±0.004     | 0.583±0.024        |
+| 14        | 0.710±0.045     | 0.570±0.030     | 0.581±0.036        |
+| 16        | 0.785±0.009     | 0.619±0.033     | 0.574±0.048        |
+| 11        | 0.812±0.017     | 0.619±0.020     | 0.625±0.018        |
+| 21        | 0.705±0.017     | 0.582±0.023     | 0.585±0.021        |
+| 1         | 0.773±0.011     | 0.636±0.010     | 0.602±0.016        |
+| 12        | 0.804±0.006     | 0.683±0.019     | 0.629±0.027        |
+
+**Table 6.** Experiment B: Mean ROC-AUC scores obtained with standard deviation for CLIP-based models retrained on SPH, untrained on SPH, and untrained of CODE-15% datasets.
+
 ## References
 
 [1] Romera-Paredes, Bernardino, and Philip Torr. "An embarrassingly simple approach to zero-shot learning." International conference on machine learning. PMLR, 2015.
