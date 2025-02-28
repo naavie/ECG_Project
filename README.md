@@ -34,4 +34,6 @@ In this study, CLIP-based models are trained on a specific set of ECG diagnostic
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/2cb2f4e8-a625-4003-8ddf-9a1fa5cf15dc" alt="White_ZeroShotLearning_ECGs drawio">
+  <br>
+  Figure 1. Zero-shot learning for ECG classification.
 </p>
