@@ -33,8 +33,5 @@ In this study, CLIP-based models are trained using the zero-shot learning proble
 In this study, CLIP-based models are trained on a specific set of ECG diagnostic classes. Then during evaluation, the trained CLIP-based models are tested on ECG diagnostic classes that were excluded during the training. The zero-shot learning problem setup allows us to evaluate the performance and ability of the CLIP-based model to generalize to new, unseen ECG diagnostic classes. One example of a real-world use case for such a CLIP-based model could be if the model were integrated with existing ECG signal software. For instance, given only an ECG signal and no other data, the CLIP-based model, if reasonably trained, can accurately provide a diagnosis given an ECG signal. 
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/c756feee-8f2a-452a-9f1f-f08bfbebcad9" alt="ZeroShotLearning_ECGs drawio">
+  <img src="https://github.com/user-attachments/assets/2cb2f4e8-a625-4003-8ddf-9a1fa5cf15dc" alt="White_ZeroShotLearning_ECGs drawio">
 </p>
-
-![White_ZeroShotLearning_ECGs drawio](https://github.com/user-attachments/assets/2cb2f4e8-a625-4003-8ddf-9a1fa5cf15dc)
-
