@@ -1,2 +1,1 @@
-# ECG_Project
-Masters Thesis Project Repository
+# Zero-shot classification of ECG signals using CLIP-based models
