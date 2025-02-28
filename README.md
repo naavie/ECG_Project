@@ -40,37 +40,44 @@ In this study, CLIP-based models are trained on a specific set of ECG diagnostic
 
 ## Results 
 
-| Training Classes                               | Zero-shot Classes                      |
-| ---------------------------------------------- | --------------------------------------- |
-| abnormal qrs                                   | 1st degree av block                    |
-| anterior myocardial infarction                 | atrial fibrillation                     |
-| complete right bundle branch block             | atrial premature complexes              |
-| indeterminate cardiac axis                     | incomplete right bundle branch block    |
-| inferior ischaemia                             | inferior mi                             |
-| left anterior fascicular block                 | left bundle branch block                |
-| left atrial enlargement                        | right bundle branch block               |
-| left axis deviation                            | sinus bradycardia                       |
-| left posterior fascicular block                | sinus tachycardia                       |
-| left ventricular hypertrophy                   | st deviation                            |
-| low qrs voltages                               | st deviation with t-wave change        |
-| myocardial infarction                          |                                         |
-| myocardial ischemia                            |                                         |
-| nonspecific intraventricular conduction disorder |                                         |
-| nonspecific st t abnormality                   |                                         |
-| pacing rhythm                                  |                                         |
-| premature atrial contraction                   |                                         |
-| prolonged pr interval                          |                                         |
-| qwave abnormal                                 |                                         |
-| right axis deviation                           |                                         |
-| s t changes                                    |                                         |
-| sinus arrhythmia                               |                                         |
-| st depression                                  |                                         |
-| supraventricular premature beats               |                                         |
-| t wave abnormal                                |                                         |
-| t wave inversion                               |                                         |
-| ventricular ectopics                           |                                         |
-
-**Table 1.** ECG diagnostic classes from all datasets used in Experiments A and B for model training/validation/testing as well as evaluation on zero-shot classes. A full list of classes excluded from all datasets is available in Supplementary Materials.
+<table>
+  <thead>
+    <tr>
+      <th>Training Classes</th>
+      <th>Zero-shot Classes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>abnormal qrs</td><td>1st degree av block</td></tr>
+    <tr><td>anterior myocardial infarction</td><td>atrial fibrillation</td></tr>
+    <tr><td>complete right bundle branch block</td><td>atrial premature complexes</td></tr>
+    <tr><td>indeterminate cardiac axis</td><td>incomplete right bundle branch block</td></tr>
+    <tr><td>inferior ischaemia</td><td>inferior mi</td></tr>
+    <tr><td>left anterior fascicular block</td><td>left bundle branch block</td></tr>
+    <tr><td>left atrial enlargement</td><td>right bundle branch block</td></tr>
+    <tr><td>left axis deviation</td><td>sinus bradycardia</td></tr>
+    <tr><td>left posterior fascicular block</td><td>sinus tachycardia</td></tr>
+    <tr><td>left ventricular hypertrophy</td><td>st deviation</td></tr>
+    <tr><td>low qrs voltages</td><td>st deviation with t-wave change</td></tr>
+    <tr><td>myocardial infarction</td><td></td></tr>
+    <tr><td>myocardial ischemia</td><td></td></tr>
+    <tr><td>nonspecific intraventricular conduction disorder</td><td></td></tr>
+    <tr><td>nonspecific st t abnormality</td><td></td></tr>
+    <tr><td>pacing rhythm</td><td></td></tr>
+    <tr><td>premature atrial contraction</td><td></td></tr>
+    <tr><td>prolonged pr interval</td><td></td></tr>
+    <tr><td>qwave abnormal</td><td></td></tr>
+    <tr><td>right axis deviation</td><td></td></tr>
+    <tr><td>s t changes</td><td></td></tr>
+    <tr><td>sinus arrhythmia</td><td></td></tr>
+    <tr><td>st depression</td><td></td></tr>
+    <tr><td>supraventricular premature beats</td><td></td></tr>
+    <tr><td>t wave abnormal</td><td></td></tr>
+    <tr><td>t wave inversion</td><td></td></tr>
+    <tr><td>ventricular ectopics</td><td></td></tr>
+  </tbody>
+</table>
+<p style="text-align: center; font-weight: bold;">Table 1. ECG diagnostic classes from all datasets used in Experiments A and B for model training/validation/testing as well as evaluation on zero-shot classes. A full list of classes excluded from all datasets is available in Supplementary Materials.</p>
 
 ## References
 
