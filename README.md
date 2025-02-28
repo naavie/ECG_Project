@@ -38,7 +38,7 @@ In this study, CLIP-based models are trained on a specific set of ECG diagnostic
   Figure 1. Zero-shot learning for ECG classification.
 </p>
 
-## Results 
+## ECG Classes and Model Training
 
 <table>
   <thead>
@@ -78,6 +78,37 @@ In this study, CLIP-based models are trained on a specific set of ECG diagnostic
   </tbody>
 </table>
 <p style="text-align: center; font-weight: bold;">Table 1. ECG diagnostic classes used to evaluate performance on seen and unseen classes</p>
+
+| Model UID | Image Encoder Models | Text Encoders       | Training Datasets             |
+| --------- | -------------------- | ------------------- | ----------------------------- |
+| 17        | CNN base             | Bio_ClinicalBERT    | (PTB-XL)                      |
+| 7         | CNN base             | Bio_ClinicalBERT    | (PTB-XL, Ningbo)              |
+| 20        | CNN base             | Bio_ClinicalBERT    | (PTB-XL, Ningbo, Georgia)     |
+| 3         | CNN V2               | Bio_ClinicalBERT    | (PTB-XL)                      |
+| 15        | CNN V2               | Bio_ClinicalBERT    | (PTB-XL, Ningbo)              |
+| 23        | CNN V2               | Bio_ClinicalBERT    | (PTB-XL, Ningbo, Georgia)     |
+| 10        | CNN V3               | Bio_ClinicalBERT    | (PTB-XL)                      |
+| 22        | CNN V3               | Bio_ClinicalBERT    | (PTB-XL, Ningbo)              |
+| 0         | CNN V3               | Bio_ClinicalBERT    | (PTB-XL, Ningbo, Georgia)     |
+| 6         | ISIBrno              | BioBERT             | (PTB-XL)                      |
+| 18        | ISIBrno              | BioBERT             | (PTB-XL, Ningbo)              |
+| 9         | ISIBrno              | BioBERT             | (PTB-XL, Ningbo, Georgia)     |
+| 13        | ISIBrno              | Bio_ClinicalBERT    | (PTB-XL)                      |
+| 2         | ISIBrno              | Bio_ClinicalBERT    | (PTB-XL, Ningbo)              |
+| 8         | ISIBrno              | Bio_ClinicalBERT    | (PTB-XL, Ningbo, Georgia)     |
+| 4         | ISIBrno              | Bio_ClinicalBERT    | (PTB-XL)                      |
+| 5         | ISIBrno              | Bio_ClinicalBERT    | (PTB-XL, Ningbo)              |
+| 19        | ISIBrno              | Bio_ClinicalBERT    | (PTB-XL, Ningbo, Georgia)     |
+| 14        | ISIBrno              | bert-base-uncased   | (PTB-XL)                      |
+| 16        | ISIBrno              | bert-base-uncased   | (PTB-XL, Ningbo)              |
+| 11        | ISIBrno              | bert-base-uncased   | (PTB-XL, Ningbo, Georgia)     |
+| 21        | RNN model            | Bio_ClinicalBERT    | (PTB-XL)                      |
+| 1         | RNN model            | Bio_ClinicalBERT    | (PTB-XL, Ningbo)              |
+| 12        | RNN model            | Bio_ClinicalBERT    | (PTB-XL, Ningbo, Georgia)     |
+
+**Table 2.** Experiment A: CLIP-based models trained in Experiment B.
+
+## Results
 
 ## References
 
