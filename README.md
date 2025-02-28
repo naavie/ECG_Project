@@ -43,8 +43,8 @@ In this study, CLIP-based models are trained on a specific set of ECG diagnostic
 <table>
   <thead>
     <tr>
-      <th>Training Classes</th>
-      <th>Zero-shot Classes</th>
+      <th>Training (Seen) Classes</th>
+      <th>Zero-shot (Unseen) Classes</th>
     </tr>
   </thead>
   <tbody>
@@ -77,7 +77,7 @@ In this study, CLIP-based models are trained on a specific set of ECG diagnostic
     <tr><td>ventricular ectopics</td><td></td></tr>
   </tbody>
 </table>
-<p style="text-align: center; font-weight: bold;">Table 1. ECG diagnostic classes from all datasets used in Experiments A and B for model training/validation/testing as well as evaluation on zero-shot classes. A full list of classes excluded from all datasets is available in Supplementary Materials.</p>
+<p style="text-align: center; font-weight: bold;">Table 1. ECG diagnostic classes used to evaluate performance on seen and unseen classes</p>
 
 ## References
 
